@@ -36,8 +36,8 @@ export function TankSystem() {
       <Canvas shadows gl={{ antialias: true, powerPreference: "high-performance" }}>
         <PerspectiveCamera
           makeDefault
-          position={[15, 10, 15]}
-          fov={50}
+          position={[20, 12, 20]}
+          fov={45}
           near={0.1}
           far={1000}
         />
@@ -72,10 +72,54 @@ export function TankSystem() {
         {/* Environment */}
         <Environment preset="warehouse" />
 
-        {/* Ground plane */}
+        {/* Industrial Plant Ground */}
         <mesh receiveShadow position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[50, 50]} />
-          <meshStandardMaterial color="#2a2a2a" />
+          <planeGeometry args={[80, 60]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+        
+        {/* Concrete pads under tanks */}
+        {tanks.map((tank) => (
+          <mesh key={`pad-${tank.id}`} rotation={[-Math.PI / 2, 0, 0]} position={[tank.position[0], -1.9, tank.position[2]]} receiveShadow>
+            <circleGeometry args={[2.5]} />
+            <meshStandardMaterial color="#404040" />
+          </mesh>
+        ))}
+        
+        {/* Access roads */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.95, -12]} receiveShadow>
+          <planeGeometry args={[60, 4]} />
+          <meshStandardMaterial color="#2c2c2c" />
+        </mesh>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.95, 12]} receiveShadow>
+          <planeGeometry args={[60, 4]} />
+          <meshStandardMaterial color="#2c2c2c" />
+        </mesh>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-18, -1.95, 0]} receiveShadow>
+          <planeGeometry args={[4, 40]} />
+          <meshStandardMaterial color="#2c2c2c" />
+        </mesh>
+        
+        {/* Control building (main office) */}
+        <mesh position={[15, -0.5, -8]} castShadow>
+          <boxGeometry args={[6, 3, 4]} />
+          <meshStandardMaterial color="#3a3a3a" />
+        </mesh>
+        
+        {/* Utility building */}
+        <mesh position={[-15, -1, 8]} castShadow>
+          <boxGeometry args={[4, 2, 3]} />
+          <meshStandardMaterial color="#4a4a4a" />
+        </mesh>
+        
+        {/* Piping infrastructure - main distribution lines */}
+        <mesh position={[0, -1, 0]} castShadow>
+          <cylinderGeometry args={[0.2, 0.2, 30]} />
+          <meshStandardMaterial color="#8B4513" />
+        </mesh>
+        <mesh position={[0, -1, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+          <cylinderGeometry args={[0.2, 0.2, 25]} />
+          <meshStandardMaterial color="#8B4513" />
         </mesh>
 
         {/* Tank grid */}
@@ -89,7 +133,7 @@ export function TankSystem() {
         ))}
 
         {/* Reference grid lines */}
-        <gridHelper args={[30, 30, '#444444', '#333333']} position={[0, -1.99, 0]} />
+        <gridHelper args={[60, 40, '#444444', '#333333']} position={[0, -1.99, 0]} />
       </Canvas>
 
       {/* 3D Controls overlay - repositioned for floating UI */}

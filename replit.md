@@ -90,6 +90,24 @@ Changelog:
 
 ## Recent Changes
 
+### Realistic Plant Layout Based on Google Earth (July 06, 2025)
+- Updated tank layout to mirror real Tipco Asphalt Public Company plant from satellite imagery
+- Increased to 12 tanks with realistic industrial positioning and naming (ASP-01 to ASP-12)
+- Enhanced 3D environment with industrial infrastructure:
+  - Concrete pads under each tank
+  - Access roads and vehicle circulation routes
+  - Control building and utility structures
+  - Underground piping distribution system
+- Adjusted camera positioning for optimal plant overview
+- Larger tank capacities (80k-120k liters) to match real-world scale
+
+### Theme Consistency Implementation (July 06, 2025)
+- Established industrial SCADA color palette with CSS variables
+- Created reusable theme classes (.industrial-panel, .industrial-card, .industrial-button)
+- Applied consistent status indicators (.status-critical, .status-warning, .status-success)
+- Standardized typography with monospace fonts for data values
+- Glass morphism effects throughout interface
+
 ### Floating Panel Interface (July 06, 2025)
 - Transformed UI from fixed panels to floating, draggable windows
 - 3D viewport now serves as full-screen background

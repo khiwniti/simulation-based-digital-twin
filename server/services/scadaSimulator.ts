@@ -15,23 +15,45 @@ export class SCADASimulator {
   }
 
   private initializeTanks() {
-    // Initialize 9 asphalt tanks in a 3x3 grid
-    for (let i = 1; i <= 9; i++) {
-      const row = Math.floor((i - 1) / 3);
-      const col = (i - 1) % 3;
+    // Initialize tanks based on real Tipco Asphalt plant layout from Google Earth
+    // Realistic industrial positions mirroring the satellite image
+    const tankPositions = [
+      // Front row - 3 large tanks
+      [-8, 0, -6],   // Tank 01 - Front left
+      [-2, 0, -6],   // Tank 02 - Front center  
+      [4, 0, -6],    // Tank 03 - Front right
+      
+      // Middle row - 4 tanks in staggered formation
+      [-10, 0, 0],   // Tank 04 - Left side
+      [-4, 0, 0],    // Tank 05 - Center left
+      [2, 0, 0],     // Tank 06 - Center right
+      [8, 0, 0],     // Tank 07 - Right side
+      
+      // Back row - 3 tanks
+      [-6, 0, 6],    // Tank 08 - Back left
+      [0, 0, 6],     // Tank 09 - Back center
+      [6, 0, 6],     // Tank 10 - Back right
+      
+      // Additional tanks for realistic plant scale
+      [-12, 0, 3],   // Tank 11 - Far left
+      [10, 0, 3],    // Tank 12 - Far right
+    ];
+
+    for (let i = 1; i <= 12; i++) {
       const now = new Date();
+      const position = tankPositions[i - 1] || [0, 0, 0];
       
       this.tanks.push({
         id: i,
-        name: `Tank-${i.toString().padStart(2, '0')}`,
+        name: `ASP-${i.toString().padStart(2, '0')}`, // More realistic naming (Asphalt Plant)
         temperature: 140 + Math.random() * 20, // 140-160°C base
         targetTemperature: 150,
-        capacity: 50000 + Math.random() * 30000, // 50k-80k liters
-        currentLevel: 20000 + Math.random() * 40000, // 20k-60k liters
+        capacity: 80000 + Math.random() * 40000, // 80k-120k liters (larger realistic tanks)
+        currentLevel: 30000 + Math.random() * 60000, // 30k-90k liters
         status: 'normal',
         boilerStatus: Math.random() > 0.2 ? 'active' : 'inactive',
         lastUpdated: now,
-        position: [col * 4 - 4, 0, row * 4 - 4], // 3x3 grid with 4-unit spacing
+        position: position as [number, number, number],
         sensors: {
           temperatureSensor: {
             value: 140 + Math.random() * 20,
