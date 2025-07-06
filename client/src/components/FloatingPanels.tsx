@@ -58,7 +58,7 @@ export function FloatingPanels() {
       component: <IndustrialUI />,
       defaultPosition: { x: 20, y: 80 },
       defaultSize: { width: 380, height: 480 },
-      color: 'bg-slate-900 border-slate-700'
+      color: 'panel-scada'
     },
     {
       id: 'dashboard',
@@ -67,7 +67,7 @@ export function FloatingPanels() {
       component: <Dashboard />,
       defaultPosition: { x: 420, y: 80 },
       defaultSize: { width: 420, height: 580 },
-      color: 'bg-blue-900/90 border-blue-700'
+      color: 'panel-dashboard'
     },
     {
       id: 'ml',
@@ -76,7 +76,7 @@ export function FloatingPanels() {
       component: <MLPredictionPanel />,
       defaultPosition: { x: 20, y: 580 },
       defaultSize: { width: 380, height: 400 },
-      color: 'bg-purple-900/90 border-purple-700'
+      color: 'panel-ml'
     },
     {
       id: 'twin',
@@ -85,7 +85,7 @@ export function FloatingPanels() {
       component: <DigitalTwinComparison />,
       defaultPosition: { x: 860, y: 80 },
       defaultSize: { width: 420, height: 480 },
-      color: 'bg-green-900/90 border-green-700'
+      color: 'panel-twin'
     },
     {
       id: 'alerts',
@@ -94,7 +94,7 @@ export function FloatingPanels() {
       component: <AlertPanel />,
       defaultPosition: { x: 860, y: 580 },
       defaultSize: { width: 350, height: 380 },
-      color: 'bg-red-900/90 border-red-700'
+      color: 'panel-alerts'
     },
     {
       id: 'control',
@@ -103,7 +103,7 @@ export function FloatingPanels() {
       component: <ControlPanel />,
       defaultPosition: { x: 420, y: 680 },
       defaultSize: { width: 420, height: 320 },
-      color: 'bg-orange-900/90 border-orange-700'
+      color: 'panel-control'
     }
   ];
 
@@ -167,53 +167,51 @@ export function FloatingPanels() {
     <div className="absolute inset-0 z-10 pointer-events-none">
       {/* Panel Toggle Bar */}
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 pointer-events-auto">
-        <Card className="bg-black/80 backdrop-blur-sm border-gray-600">
-          <CardContent className="p-3">
+        <div className="industrial-card">
+          <div className="p-3">
             <div className="flex items-center space-x-2">
               {panels.map((panel) => (
-                <Button
+                <button
                   key={panel.id}
-                  variant={panelStates[panel.id].isVisible ? 'default' : 'ghost'}
-                  size="sm"
                   onClick={() => handlePanelAction(panel.id, 'toggle')}
-                  className={`flex items-center space-x-2 ${
+                  className={`industrial-button flex items-center space-x-2 text-xs ${
                     panelStates[panel.id].isVisible 
-                      ? 'bg-blue-600 hover:bg-blue-700' 
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                      ? 'bg-white/20 text-white border-white/30' 
+                      : 'bg-white/5 text-gray-300 hover:text-white hover:bg-white/15'
                   }`}
                 >
                   {panel.icon}
-                  <span className="hidden md:inline text-xs">{panel.title}</span>
+                  <span className="hidden md:inline">{panel.title}</span>
                   {panel.id === 'alerts' && unacknowledgedCount > 0 && (
-                    <Badge variant="destructive" className="ml-1 text-xs px-1 py-0">
+                    <span className="ml-1 px-1.5 py-0.5 bg-red-500 text-white rounded-full text-xs font-bold">
                       {unacknowledgedCount}
-                    </Badge>
+                    </span>
                   )}
-                </Button>
+                </button>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* System Status Indicator */}
       <div className="absolute top-4 right-4 pointer-events-auto">
-        <Card className="bg-black/80 backdrop-blur-sm border-gray-600">
-          <CardContent className="p-3">
+        <div className="industrial-card">
+          <div className="p-3">
             <div className="flex items-center space-x-3 text-white">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm">System Online</span>
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-sm font-medium">System Online</span>
               </div>
               {selectedTank && (
-                <div className="flex items-center space-x-2 border-l border-gray-600 pl-3">
+                <div className="flex items-center space-x-2 border-l border-white/20 pl-3">
                   <Settings className="h-4 w-4" />
-                  <span className="text-sm">Tank-{selectedTank.toString().padStart(2, '0')}</span>
+                  <span className="text-sm font-mono">Tank-{selectedTank.toString().padStart(2, '0')}</span>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Floating Panels */}
@@ -301,46 +299,42 @@ function FloatingPanel({ panel, state, onAction, onDrag }: FloatingPanelProps) {
         zIndex: state.zIndex
       }}
     >
-      <Card className={`${panel.color} text-white shadow-2xl backdrop-blur-sm`}>
-        <CardHeader 
-          className="cursor-move p-3 border-b border-gray-600"
+      <div className={`industrial-card ${panel.color} text-white shadow-2xl backdrop-blur-md border border-white/20`}>
+        <div 
+          className="cursor-move p-3 border-b border-white/20 bg-black/20"
           onMouseDown={handleMouseDown}
         >
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center space-x-2 text-sm">
+            <div className="flex items-center space-x-2 text-sm font-medium">
               {panel.icon}
               <span>{panel.title}</span>
               <Move className="h-3 w-3 text-gray-400" />
-            </CardTitle>
+            </div>
             
             <div className="flex items-center space-x-1">
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => onAction('minimize')}
-                className="h-6 w-6 p-0 text-gray-300 hover:text-white hover:bg-white/20"
+                className="h-6 w-6 p-0 text-gray-300 hover:text-white hover:bg-white/20 rounded transition-colors"
               >
                 {state.isMinimized ? <Maximize2 className="h-3 w-3" /> : <Minimize2 className="h-3 w-3" />}
-              </Button>
+              </button>
               
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => onAction('close')}
-                className="h-6 w-6 p-0 text-gray-300 hover:text-white hover:bg-red-500/50"
+                className="h-6 w-6 p-0 text-gray-300 hover:text-white hover:bg-red-500/50 rounded transition-colors"
               >
                 <X className="h-3 w-3" />
-              </Button>
+              </button>
             </div>
           </div>
-        </CardHeader>
+        </div>
         
         {!state.isMinimized && (
-          <CardContent className="p-4 overflow-auto" style={{ maxHeight: state.size.height - 60 }}>
+          <div className="p-4 overflow-auto" style={{ maxHeight: state.size.height - 60 }}>
             {panel.component}
-          </CardContent>
+          </div>
         )}
-      </Card>
+      </div>
     </div>
   );
 }

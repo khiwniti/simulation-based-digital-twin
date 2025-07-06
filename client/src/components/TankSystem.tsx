@@ -93,35 +93,37 @@ export function TankSystem() {
       </Canvas>
 
       {/* 3D Controls overlay - repositioned for floating UI */}
-      <div className="absolute bottom-4 left-4 bg-black/70 text-white p-3 rounded-lg text-sm backdrop-blur-sm border border-gray-600">
-        <div className="font-semibold mb-2">3D Controls</div>
-        <div>• Mouse: Rotate view</div>
-        <div>• Wheel: Zoom in/out</div>
-        <div>• Right click: Pan</div>
-        <div>• Click tank: Select</div>
+      <div className="absolute bottom-4 left-4 industrial-card p-4 text-sm">
+        <div className="metric-label mb-3">3D Navigation</div>
+        <div className="space-y-1 text-gray-300">
+          <div>• <span className="text-white">Mouse:</span> Rotate view</div>
+          <div>• <span className="text-white">Wheel:</span> Zoom in/out</div>
+          <div>• <span className="text-white">Right click:</span> Pan</div>
+          <div>• <span className="text-white">Click tank:</span> Select</div>
+        </div>
       </div>
 
       {/* Mini-map */}
-      <div className="absolute bottom-4 right-4 w-32 h-32 bg-black/70 backdrop-blur-sm border border-gray-600 rounded-lg p-2">
-        <div className="text-white text-xs font-semibold mb-1">Tank Layout</div>
-        <div className="grid grid-cols-3 gap-1 h-full">
+      <div className="absolute bottom-4 right-4 w-36 h-36 industrial-card p-3">
+        <div className="metric-label mb-2">Tank Layout</div>
+        <div className="grid grid-cols-3 gap-1.5 h-full">
           {tanks.map((tank) => (
             <div
               key={tank.id}
-              className={`rounded-sm border cursor-pointer transition-colors ${
+              className={`rounded border-2 cursor-pointer transition-all duration-200 ${
                 selectedTank === tank.id 
-                  ? 'bg-blue-500 border-blue-400' 
+                  ? 'bg-blue-500 border-blue-300 scale-105 shadow-lg' 
                   : tank.status === 'critical' 
-                    ? 'bg-red-500 border-red-400'
+                    ? 'bg-red-500 border-red-300 hover:scale-105'
                     : tank.status === 'warning'
-                      ? 'bg-yellow-500 border-yellow-400'
-                      : 'bg-green-500 border-green-400'
+                      ? 'bg-yellow-500 border-yellow-300 hover:scale-105'
+                      : 'bg-green-500 border-green-300 hover:scale-105'
               }`}
               onClick={() => setSelectedTank(tank.id)}
               title={`${tank.name} - ${tank.status}`}
             >
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-white text-xs font-bold">{tank.id}</span>
+                <span className="text-white text-xs font-bold font-mono">{tank.id}</span>
               </div>
             </div>
           ))}

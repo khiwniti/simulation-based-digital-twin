@@ -34,20 +34,24 @@ function App() {
   }, [setSystemMetrics, setConnectionStatus, addAlert]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
+      <header className="industrial-panel border-b border-white/20 relative z-50">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold">Asphalt Tank Management System</h1>
-              <p className="text-sm text-muted-foreground">
-                Digital Twin & Real-time Monitoring
+              <h1 className="text-2xl font-bold text-white">Asphalt Tank Management System</h1>
+              <p className="text-sm text-gray-300 font-medium">
+                Digital Twin & Real-time SCADA Monitoring
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-sm text-muted-foreground">
-                Last Update: {new Date().toLocaleTimeString()}
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-sm text-gray-300">System Online</span>
+              </div>
+              <div className="text-sm text-gray-300 font-mono">
+                {new Date().toLocaleTimeString()}
               </div>
             </div>
           </div>

@@ -3,17 +3,95 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* SCADA Theme Colors */
+    --industrial-primary: 210 40% 8%;
+    --industrial-secondary: 210 40% 12%;
+    --industrial-accent: 210 40% 18%;
+    --industrial-border: 215 25% 25%;
+    --industrial-muted: 215 20% 40%;
+    --industrial-foreground: 210 20% 98%;
+    
+    /* Status Colors */
+    --status-critical: 0 84% 60%;
+    --status-warning: 38 92% 50%;
+    --status-success: 142 76% 36%;
+    --status-info: 221 83% 53%;
+    
+    /* Panel Colors */
+    --panel-scada: 215 28% 17%;
+    --panel-dashboard: 221 83% 15%;
+    --panel-ml: 262 83% 15%;
+    --panel-twin: 142 76% 15%;
+    --panel-alerts: 0 84% 15%;
+    --panel-control: 25 95% 15%;
+    
+    /* Glass Effect */
+    --glass-bg: rgba(0, 0, 0, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-backdrop: blur(10px);
+  }
+
   * {
     @apply border-border;
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased;
     margin: 0;
     padding: 0;
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    background: linear-gradient(135deg, hsl(var(--industrial-primary)), hsl(var(--industrial-secondary)));
+    color: hsl(var(--industrial-foreground));
+  }
+}
+
+@layer components {
+  /* Industrial Panel Base */
+  .industrial-panel {
+    @apply bg-black/70 backdrop-blur-md border border-white/10 text-white shadow-2xl;
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    backdrop-filter: var(--glass-backdrop);
+  }
+  
+  /* Status Indicators */
+  .status-critical { @apply text-red-400 bg-red-900/20 border-red-500/50; }
+  .status-warning { @apply text-yellow-400 bg-yellow-900/20 border-yellow-500/50; }
+  .status-success { @apply text-green-400 bg-green-900/20 border-green-500/50; }
+  .status-info { @apply text-blue-400 bg-blue-900/20 border-blue-500/50; }
+  
+  /* Panel Themes */
+  .panel-scada { background: linear-gradient(135deg, hsl(var(--panel-scada)), hsl(var(--panel-scada)) 60%); }
+  .panel-dashboard { background: linear-gradient(135deg, hsl(var(--panel-dashboard)), hsl(var(--panel-dashboard)) 60%); }
+  .panel-ml { background: linear-gradient(135deg, hsl(var(--panel-ml)), hsl(var(--panel-ml)) 60%); }
+  .panel-twin { background: linear-gradient(135deg, hsl(var(--panel-twin)), hsl(var(--panel-twin)) 60%); }
+  .panel-alerts { background: linear-gradient(135deg, hsl(var(--panel-alerts)), hsl(var(--panel-alerts)) 60%); }
+  .panel-control { background: linear-gradient(135deg, hsl(var(--panel-control)), hsl(var(--panel-control)) 60%); }
+  
+  /* Industrial Button */
+  .industrial-button {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200;
+    @apply bg-white/10 hover:bg-white/20 text-white border border-white/20;
+    @apply shadow-lg backdrop-blur-sm;
+  }
+  
+  /* Industrial Card */
+  .industrial-card {
+    @apply rounded-lg shadow-2xl backdrop-blur-md;
+    @apply border border-white/10 bg-black/70;
+  }
+  
+  /* Data Display */
+  .data-value {
+    @apply text-2xl font-bold font-mono tracking-wide;
+  }
+  
+  /* Metric Label */
+  .metric-label {
+    @apply text-sm font-medium text-gray-300 uppercase tracking-wider;
   }
 }
 

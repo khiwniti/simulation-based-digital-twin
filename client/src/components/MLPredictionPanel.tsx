@@ -22,15 +22,15 @@ export function MLPredictionPanel() {
 
   if (!selectedTankData?.prediction) {
     return (
-      <Card>
-        <CardContent className="py-8">
-          <div className="text-center text-muted-foreground">
-            <Brain className="h-12 w-12 mx-auto mb-4" />
-            <p className="text-lg font-medium">AI Prediction Engine</p>
-            <p className="text-sm">Select a tank to view ML predictions</p>
+      <div className="industrial-card">
+        <div className="py-8">
+          <div className="text-center">
+            <Brain className="h-12 w-12 mx-auto mb-4 text-purple-400" />
+            <p className="text-lg font-bold text-white">AI Prediction Engine</p>
+            <p className="metric-label">Select a tank to view ML predictions</p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
@@ -70,17 +70,19 @@ export function MLPredictionPanel() {
   return (
     <div className="space-y-4">
       {/* ML Prediction Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Brain className="h-5 w-5 text-blue-500" />
-            <span>AI Prediction Engine</span>
-            <Badge variant="secondary" className="ml-auto">
+      <div className="industrial-card mb-4">
+        <div className="p-4 border-b border-white/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Brain className="h-5 w-5 text-purple-400" />
+              <span className="text-lg font-bold text-white">AI Prediction Engine</span>
+            </div>
+            <span className="metric-label bg-white/10 px-2 py-1 rounded">
               {selectedTankData.name}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+            </span>
+          </div>
+        </div>
+        <div className="p-4">
           <div className="grid grid-cols-2 gap-4">
             {/* Next Action Prediction */}
             <div className="space-y-2">
@@ -95,7 +97,12 @@ export function MLPredictionPanel() {
               <div className="text-xs text-muted-foreground">
                 Confidence: {(prediction.actionConfidence * 100).toFixed(1)}%
               </div>
-              <Progress value={prediction.actionConfidence * 100} className="h-2" />
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div 
+                  className="bg-purple-400 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${prediction.actionConfidence * 100}%` }}
+                />
+              </div>
             </div>
 
             {/* Energy Optimization */}
@@ -107,11 +114,16 @@ export function MLPredictionPanel() {
               <div className="text-2xl font-bold">
                 {prediction.energyOptimization.toFixed(1)}%
               </div>
-              <Progress value={prediction.energyOptimization} className="h-2" />
+              <div className="w-full bg-white/10 rounded-full h-2">
+                <div 
+                  className="bg-yellow-400 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${prediction.energyOptimization}%` }}
+                />
+              </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Temperature Prediction Chart */}
       <Card>

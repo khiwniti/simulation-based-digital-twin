@@ -30,29 +30,26 @@ interface SystemStatusProps {
 }
 
 function SystemStatus({ title, value, unit = '', status, icon }: SystemStatusProps) {
-  const getStatusColor = () => {
+  const getStatusClass = () => {
     switch (status) {
-      case 'critical': return 'border-red-500 bg-red-50 dark:bg-red-900/20';
-      case 'warning': return 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20';
-      default: return 'border-green-500 bg-green-50 dark:bg-green-900/20';
+      case 'critical': return 'status-critical';
+      case 'warning': return 'status-warning';
+      default: return 'status-success';
     }
   };
 
   return (
-    <div className={`p-3 rounded-lg border-2 ${getStatusColor()} transition-colors`}>
+    <div className={`p-3 rounded-lg border ${getStatusClass()} transition-colors`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           {icon}
-          <span className="text-sm font-medium">{title}</span>
+          <span className="metric-label">{title}</span>
         </div>
-        <Badge 
-          variant={status === 'critical' ? 'destructive' : status === 'warning' ? 'secondary' : 'default'}
-          className="text-xs"
-        >
+        <span className="text-xs font-bold px-2 py-1 rounded bg-white/10">
           {status.toUpperCase()}
-        </Badge>
+        </span>
       </div>
-      <div className="text-xl font-bold">
+      <div className="data-value">
         {value}{unit}
       </div>
     </div>
@@ -75,14 +72,14 @@ export function IndustrialUI() {
   return (
     <div className="space-y-4">
       {/* System Header */}
-      <Card className="bg-slate-900 text-white border-slate-700">
-        <CardHeader className="pb-3">
+      <div className="industrial-card mb-4">
+        <div className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Monitor className="h-6 w-6 text-blue-400" />
               <div>
-                <CardTitle className="text-lg">Industrial Control System</CardTitle>
-                <p className="text-sm text-slate-300">Asphalt Tank Management - SCADA Interface</p>
+                <h3 className="text-lg font-bold text-white">Industrial Control System</h3>
+                <p className="metric-label">Asphalt Tank Management - SCADA Interface</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -92,35 +89,37 @@ export function IndustrialUI() {
                 ) : (
                   <WifiOff className="h-4 w-4 text-red-400" />
                 )}
-                <span className="text-sm">
+                <span className="text-sm font-medium text-white">
                   {isConnected ? 'ONLINE' : 'OFFLINE'}
                 </span>
               </div>
-              <div className="text-sm text-slate-300">
+              <div className="text-sm font-mono text-gray-300">
                 {new Date().toLocaleTimeString()}
               </div>
             </div>
           </div>
-        </CardHeader>
-      </Card>
+        </div>
+      </div>
 
       {/* System Tabs */}
-      <div className="flex space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+      <div className="flex space-x-1 bg-white/5 p-1 rounded-lg mb-4">
         {[
           { id: 'general', label: 'General', icon: <Cpu className="h-4 w-4" /> },
           { id: 'thermal', label: 'Thermal', icon: <Thermometer className="h-4 w-4" /> },
           { id: 'electrical', label: 'Electrical', icon: <Zap className="h-4 w-4" /> }
         ].map((tab) => (
-          <Button
+          <button
             key={tab.id}
-            variant={selectedSystem === tab.id ? 'default' : 'ghost'}
-            size="sm"
             onClick={() => setSelectedSystem(tab.id as any)}
-            className="flex items-center space-x-2 flex-1"
+            className={`industrial-button flex items-center space-x-2 flex-1 ${
+              selectedSystem === tab.id 
+                ? 'bg-white/20 text-white border-white/30' 
+                : 'bg-white/5 text-gray-300'
+            }`}
           >
             {tab.icon}
             <span>{tab.label}</span>
-          </Button>
+          </button>
         ))}
       </div>
 
@@ -229,14 +228,14 @@ export function IndustrialUI() {
       )}
 
       {/* Monthly Overview Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Activity className="h-5 w-5" />
-            <span>Monthly Performance Overview</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="industrial-card">
+        <div className="p-4 border-b border-white/20">
+          <div className="flex items-center space-x-2">
+            <Activity className="h-5 w-5 text-blue-400" />
+            <h3 className="text-lg font-bold text-white">Monthly Performance Overview</h3>
+          </div>
+        </div>
+        <div className="p-4">
           <div className="space-y-4">
             {/* Performance Bars */}
             <div className="grid grid-cols-12 gap-2 items-end h-32">
@@ -248,8 +247,8 @@ export function IndustrialUI() {
                     key={i}
                     className={`rounded-t-sm transition-all duration-300 ${
                       isCurrentMonth 
-                        ? 'bg-blue-500 shadow-lg' 
-                        : 'bg-green-500 hover:bg-green-600'
+                        ? 'bg-blue-400 shadow-lg shadow-blue-500/30' 
+                        : 'bg-green-400 hover:bg-green-300'
                     }`}
                     style={{ height: `${height}%` }}
                     title={`${new Date(2025, i).toLocaleDateString('en', { month: 'short' })}: ${height.toFixed(0)}%`}
@@ -259,9 +258,9 @@ export function IndustrialUI() {
             </div>
             
             {/* Month Labels */}
-            <div className="grid grid-cols-12 gap-2 text-xs text-center text-muted-foreground">
+            <div className="grid grid-cols-12 gap-2 text-xs text-center text-gray-300">
               {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, i) => (
-                <div key={month} className={i === new Date().getMonth() ? 'font-bold text-blue-500' : ''}>
+                <div key={month} className={i === new Date().getMonth() ? 'font-bold text-blue-400' : ''}>
                   {month}
                 </div>
               ))}
@@ -269,62 +268,63 @@ export function IndustrialUI() {
           </div>
 
           {/* Performance Metrics */}
-          <div className="mt-6 grid grid-cols-3 gap-4 pt-4 border-t">
+          <div className="mt-6 grid grid-cols-3 gap-4 pt-4 border-t border-white/20">
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-500">98.2%</div>
-              <div className="text-sm text-muted-foreground">Uptime</div>
+              <div className="data-value text-green-400">98.2%</div>
+              <div className="metric-label">Uptime</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-500">94.7%</div>
-              <div className="text-sm text-muted-foreground">Efficiency</div>
+              <div className="data-value text-blue-400">94.7%</div>
+              <div className="metric-label">Efficiency</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-500">7.2yrs</div>
-              <div className="text-sm text-muted-foreground">TCO</div>
+              <div className="data-value text-purple-400">7.2yrs</div>
+              <div className="metric-label">TCO</div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Real-time Operations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Timer className="h-5 w-5" />
-            <span>Real-time Operations</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="industrial-card">
+        <div className="p-4 border-b border-white/20">
+          <div className="flex items-center space-x-2">
+            <Timer className="h-5 w-5 text-green-400" />
+            <h3 className="text-lg font-bold text-white">Real-time Operations</h3>
+          </div>
+        </div>
+        <div className="p-4">
           <div className="space-y-3">
             {tanks.slice(0, 6).map((tank) => (
-              <div key={tank.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+              <div key={tank.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
                 <div className="flex items-center space-x-3">
                   <div className={`w-3 h-3 rounded-full ${
-                    tank.status === 'normal' ? 'bg-green-500' :
-                    tank.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                    tank.status === 'normal' ? 'bg-green-400' :
+                    tank.status === 'warning' ? 'bg-yellow-400' : 'bg-red-400'
                   } animate-pulse`} />
-                  <span className="font-medium">{tank.name}</span>
+                  <span className="font-medium text-white">{tank.name}</span>
                 </div>
                 
                 <div className="flex items-center space-x-4 text-sm">
-                  <span className="text-muted-foreground">
+                  <span className="text-gray-300 font-mono">
                     {tank.temperature.toFixed(1)}°C
                   </span>
-                  <span className="text-muted-foreground">
+                  <span className="text-gray-300 font-mono">
                     {((tank.currentLevel / tank.capacity) * 100).toFixed(0)}%
                   </span>
-                  <Badge 
-                    variant={tank.boilerStatus === 'active' ? 'default' : 'secondary'}
-                    className="text-xs"
-                  >
-                    {tank.boilerStatus}
-                  </Badge>
+                  <span className={`text-xs font-bold px-2 py-1 rounded ${
+                    tank.boilerStatus === 'active' 
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                      : 'bg-gray-500/20 text-gray-400 border border-gray-500/50'
+                  }`}>
+                    {tank.boilerStatus.toUpperCase()}
+                  </span>
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
