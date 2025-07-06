@@ -3,11 +3,22 @@ import { TankSystem } from './components/TankSystem';
 import { Dashboard } from './components/Dashboard';
 import { AlertPanel } from './components/AlertPanel';
 import { ControlPanel } from './components/ControlPanel';
+import { MLPredictionPanel } from './components/MLPredictionPanel';
+import { IndustrialUI } from './components/IndustrialUI';
+import { DigitalTwinComparison } from './components/DigitalTwinComparison';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { useTankSystem } from './lib/stores/useTankSystem';
 import { useAlerts } from './lib/stores/useAlerts';
 import { socketManager } from './lib/socket';
-import { Gauge, BarChart3, AlertTriangle, Settings } from 'lucide-react';
+import { 
+  Gauge, 
+  BarChart3, 
+  AlertTriangle, 
+  Settings, 
+  Brain, 
+  Monitor,
+  GitCompare
+} from 'lucide-react';
 
 function App() {
   const { setSystemMetrics, setConnectionStatus } = useTankSystem();
@@ -75,29 +86,49 @@ function App() {
 
           {/* Right Panel - Controls and Information */}
           <div className="col-span-4">
-            <Tabs defaultValue="dashboard" className="h-full">
-              <TabsList className="grid w-full grid-cols-4">
+            <Tabs defaultValue="industrial" className="h-full">
+              <TabsList className="grid w-full grid-cols-6 text-xs">
+                <TabsTrigger value="industrial" className="flex items-center space-x-1">
+                  <Monitor className="h-3 w-3" />
+                  <span className="hidden lg:inline">SCADA</span>
+                </TabsTrigger>
                 <TabsTrigger value="dashboard" className="flex items-center space-x-1">
-                  <Gauge className="h-4 w-4" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                  <Gauge className="h-3 w-3" />
+                  <span className="hidden lg:inline">Dashboard</span>
+                </TabsTrigger>
+                <TabsTrigger value="ml" className="flex items-center space-x-1">
+                  <Brain className="h-3 w-3" />
+                  <span className="hidden lg:inline">AI/ML</span>
+                </TabsTrigger>
+                <TabsTrigger value="twin" className="flex items-center space-x-1">
+                  <GitCompare className="h-3 w-3" />
+                  <span className="hidden lg:inline">Twin</span>
                 </TabsTrigger>
                 <TabsTrigger value="alerts" className="flex items-center space-x-1">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Alerts</span>
+                  <AlertTriangle className="h-3 w-3" />
+                  <span className="hidden lg:inline">Alerts</span>
                 </TabsTrigger>
                 <TabsTrigger value="control" className="flex items-center space-x-1">
-                  <Settings className="h-4 w-4" />
-                  <span className="hidden sm:inline">Control</span>
-                </TabsTrigger>
-                <TabsTrigger value="reports" className="flex items-center space-x-1">
-                  <BarChart3 className="h-4 w-4" />
-                  <span className="hidden sm:inline">Reports</span>
+                  <Settings className="h-3 w-3" />
+                  <span className="hidden lg:inline">Control</span>
                 </TabsTrigger>
               </TabsList>
               
               <div className="mt-4 h-[calc(100%-60px)]">
+                <TabsContent value="industrial" className="h-full overflow-auto">
+                  <IndustrialUI />
+                </TabsContent>
+                
                 <TabsContent value="dashboard" className="h-full overflow-auto">
                   <Dashboard />
+                </TabsContent>
+                
+                <TabsContent value="ml" className="h-full overflow-auto">
+                  <MLPredictionPanel />
+                </TabsContent>
+                
+                <TabsContent value="twin" className="h-full overflow-auto">
+                  <DigitalTwinComparison />
                 </TabsContent>
                 
                 <TabsContent value="alerts" className="h-full">
@@ -106,16 +137,6 @@ function App() {
                 
                 <TabsContent value="control" className="h-full overflow-auto">
                   <ControlPanel />
-                </TabsContent>
-                
-                <TabsContent value="reports" className="h-full">
-                  <div className="bg-card rounded-lg border h-full flex items-center justify-center">
-                    <div className="text-center text-muted-foreground">
-                      <BarChart3 className="h-12 w-12 mx-auto mb-4" />
-                      <p className="text-lg font-medium">Reports Coming Soon</p>
-                      <p className="text-sm">Historical data and analytics will be available here</p>
-                    </div>
-                  </div>
                 </TabsContent>
               </div>
             </Tabs>

@@ -1,7 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh, Color } from 'three';
-import { Text } from '@react-three/drei';
+import { Text, Html } from '@react-three/drei';
 import { TankData } from '@shared/types';
 
 interface Tank3DProps {
@@ -114,7 +114,7 @@ export function Tank3D({ tank, selected, onSelect }: Tank3DProps) {
         />
       </mesh>
 
-      {/* Boiler system (simplified) */}
+      {/* Boiler system (enhanced) */}
       <group position={[1.5, -0.5, 0]}>
         <mesh>
           <boxGeometry args={[0.5, 0.5, 0.5]} />
@@ -130,7 +130,106 @@ export function Tank3D({ tank, selected, onSelect }: Tank3DProps) {
           <cylinderGeometry args={[0.05, 0.05, 1, 8]} />
           <meshStandardMaterial color="#888888" />
         </mesh>
+        
+        {/* Boiler efficiency indicator */}
+        <Text
+          position={[0, 0.4, 0]}
+          fontSize={0.15}
+          color={tank.boilerStatus === 'active' ? '#00ff00' : '#ff6600'}
+          anchorX="center"
+          anchorY="middle"
+        >
+          {tank.efficiency ? `${tank.efficiency.toFixed(0)}%` : '85%'}
+        </Text>
       </group>
+
+      {/* Sensor indicators */}
+      <group position={[-1.2, 0, 0]}>
+        {/* Temperature sensor */}
+        <mesh position={[0, 0.5, 0]}>
+          <sphereGeometry args={[0.08, 8, 8]} />
+          <meshStandardMaterial 
+            color={tank.sensors?.temperatureSensor?.status === 'online' ? '#00ff00' : '#ff0000'}
+            emissive={tank.sensors?.temperatureSensor?.status === 'online' ? '#004400' : '#440000'}
+            emissiveIntensity={0.3}
+          />
+        </mesh>
+        
+        {/* Level sensor */}
+        <mesh position={[0, 0, 0]}>
+          <sphereGeometry args={[0.08, 8, 8]} />
+          <meshStandardMaterial 
+            color={tank.sensors?.levelSensor?.status === 'online' ? '#00ff00' : '#ff0000'}
+            emissive={tank.sensors?.levelSensor?.status === 'online' ? '#004400' : '#440000'}
+            emissiveIntensity={0.3}
+          />
+        </mesh>
+        
+        {/* Pressure sensor */}
+        <mesh position={[0, -0.5, 0]}>
+          <sphereGeometry args={[0.08, 8, 8]} />
+          <meshStandardMaterial 
+            color={tank.sensors?.pressureSensor?.status === 'online' ? '#00ff00' : '#ff0000'}
+            emissive={tank.sensors?.pressureSensor?.status === 'online' ? '#004400' : '#440000'}
+            emissiveIntensity={0.3}
+          />
+        </mesh>
+      </group>
+
+      {/* ML Prediction indicator */}
+      {tank.prediction && (
+        <group position={[0, 2, 0]}>
+          <mesh>
+            <octahedronGeometry args={[0.1, 0]} />
+            <meshStandardMaterial 
+              color="#8b5cf6"
+              emissive="#8b5cf6"
+              emissiveIntensity={tank.prediction.actionConfidence * 0.5}
+              transparent
+              opacity={0.8}
+            />
+          </mesh>
+          
+          {/* ML confidence indicator */}
+          <Text
+            position={[0, 0.3, 0]}
+            fontSize={0.12}
+            color="#8b5cf6"
+            anchorX="center"
+            anchorY="middle"
+          >
+            AI: {(tank.prediction.actionConfidence * 100).toFixed(0)}%
+          </Text>
+        </group>
+      )}
+
+      {/* Data flow visualization */}
+      {selected && (
+        <group>
+          {/* Data streams */}
+          <mesh position={[-1.2, 0.8, 0]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.02, 0.02, 0.5, 6]} />
+            <meshStandardMaterial 
+              color="#00aaff"
+              emissive="#0066cc"
+              emissiveIntensity={0.3}
+              transparent
+              opacity={0.7}
+            />
+          </mesh>
+          
+          <mesh position={[0.8, 0.8, 0]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.02, 0.02, 0.5, 6]} />
+            <meshStandardMaterial 
+              color="#8b5cf6"
+              emissive="#7c3aed"
+              emissiveIntensity={0.3}
+              transparent
+              opacity={0.7}
+            />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 }

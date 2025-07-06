@@ -1,13 +1,16 @@
 import { TankData, Alert } from '@shared/types';
 import { nanoid } from 'nanoid';
+import { MLPredictionService } from './mlPredictionService';
 
 export class SCADASimulator {
   private tanks: TankData[] = [];
   private intervalId: NodeJS.Timeout | null = null;
   private alertCallback?: (alert: Alert) => void;
   private updateCallback?: (tanks: TankData[]) => void;
+  private mlService: MLPredictionService;
 
   constructor() {
+    this.mlService = new MLPredictionService();
     this.initializeTanks();
   }
 
@@ -16,6 +19,7 @@ export class SCADASimulator {
     for (let i = 1; i <= 9; i++) {
       const row = Math.floor((i - 1) / 3);
       const col = (i - 1) % 3;
+      const now = new Date();
       
       this.tanks.push({
         id: i,
@@ -26,8 +30,50 @@ export class SCADASimulator {
         currentLevel: 20000 + Math.random() * 40000, // 20k-60k liters
         status: 'normal',
         boilerStatus: Math.random() > 0.2 ? 'active' : 'inactive',
-        lastUpdated: new Date(),
-        position: [col * 4 - 4, 0, row * 4 - 4] // 3x3 grid with 4-unit spacing
+        lastUpdated: now,
+        position: [col * 4 - 4, 0, row * 4 - 4], // 3x3 grid with 4-unit spacing
+        sensors: {
+          temperatureSensor: {
+            value: 140 + Math.random() * 20,
+            timestamp: now,
+            status: 'online',
+            accuracy: 99.0 + Math.random(),
+            lastCalibration: new Date(now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000)
+          },
+          levelSensor: {
+            value: 20000 + Math.random() * 40000,
+            timestamp: now,
+            status: 'online',
+            accuracy: 98.5 + Math.random() * 1.5,
+            lastCalibration: new Date(now.getTime() - Math.random() * 14 * 24 * 60 * 60 * 1000)
+          },
+          pressureSensor: {
+            value: 2.3 + Math.random() * 0.4,
+            timestamp: now,
+            status: 'online',
+            accuracy: 99.2 + Math.random() * 0.6,
+            lastCalibration: new Date(now.getTime() - Math.random() * 7 * 24 * 60 * 60 * 1000)
+          },
+          flowSensor: {
+            value: 12 + Math.random() * 8,
+            timestamp: now,
+            status: 'online',
+            accuracy: 97.8 + Math.random() * 1.5,
+            lastCalibration: new Date(now.getTime() - Math.random() * 21 * 24 * 60 * 60 * 1000)
+          }
+        },
+        prediction: {
+          nextBoilerAction: 'no_action',
+          actionConfidence: 0.5,
+          predictedTemperature: [],
+          timeToTarget: -1,
+          energyOptimization: 75,
+          failureRisk: 0.1,
+          maintenanceWindow: null
+        },
+        efficiency: 85 + Math.random() * 10,
+        maintenanceScore: Math.random() * 100,
+        energyConsumption: 20 + Math.random() * 15
       });
     }
   }
@@ -59,31 +105,59 @@ export class SCADASimulator {
 
   private updateTanks() {
     this.tanks.forEach(tank => {
-      // Simulate temperature changes
+      // Add realistic sensor data simulation
+      const enhancedTank = this.mlService.simulateRealtimeSensorData(tank);
+      
+      // Use ML prediction for temperature control
+      const prediction = this.mlService.generatePrediction(enhancedTank);
+      
+      // Apply ML-driven temperature changes
       const tempDiff = tank.targetTemperature - tank.temperature;
-      const tempChange = tempDiff * 0.1 + (Math.random() - 0.5) * 2;
+      let tempChange = tempDiff * 0.1 + (Math.random() - 0.5) * 2;
+      
+      // Apply ML optimization if confidence is high
+      if (prediction.actionConfidence > 0.8) {
+        if (prediction.nextBoilerAction === 'start' && tank.boilerStatus === 'inactive') {
+          tank.boilerStatus = 'active';
+          tempChange += 1.5; // Faster heating when ML suggests starting
+        } else if (prediction.nextBoilerAction === 'stop' && tank.boilerStatus === 'active') {
+          tank.boilerStatus = 'inactive';
+          tempChange -= 0.5; // Gradual cooling when ML suggests stopping
+        }
+      } else {
+        // Fallback to traditional control
+        if (tank.temperature < tank.targetTemperature - 5 && tank.boilerStatus === 'inactive') {
+          tank.boilerStatus = 'active';
+        } else if (tank.temperature > tank.targetTemperature + 5 && tank.boilerStatus === 'active') {
+          tank.boilerStatus = 'inactive';
+        }
+      }
+      
       tank.temperature = Math.max(100, Math.min(200, tank.temperature + tempChange));
 
       // Simulate level changes (consumption and refill)
       const levelChange = (Math.random() - 0.6) * 1000; // Slightly decreasing trend
       tank.currentLevel = Math.max(0, Math.min(tank.capacity, tank.currentLevel + levelChange));
 
-      // Update boiler status based on temperature
-      if (tank.temperature < tank.targetTemperature - 5 && tank.boilerStatus === 'inactive') {
-        tank.boilerStatus = 'active';
-      } else if (tank.temperature > tank.targetTemperature + 5 && tank.boilerStatus === 'active') {
-        tank.boilerStatus = 'inactive';
-      }
-
       // Randomly set maintenance status
       if (Math.random() < 0.001) { // 0.1% chance per update
         tank.boilerStatus = 'maintenance';
       }
 
-      // Update status based on conditions
+      // Apply enhanced fields from ML service
+      tank.sensors = enhancedTank.sensors;
+      tank.prediction = prediction;
+      tank.efficiency = enhancedTank.efficiency;
+      tank.maintenanceScore = enhancedTank.maintenanceScore;
+      tank.energyConsumption = enhancedTank.energyConsumption;
+
+      // Update status based on conditions and ML risk assessment
       tank.status = this.calculateTankStatus(tank);
       tank.lastUpdated = new Date();
     });
+
+    // Update ML service with new data
+    this.mlService.updateHistoricalData(this.tanks);
   }
 
   private calculateTankStatus(tank: TankData): 'normal' | 'warning' | 'critical' {
