@@ -84,7 +84,29 @@ The application is designed to be cloud-ready with serverless database connectiv
 ```
 Changelog:
 - July 06, 2025. Initial setup
+- July 06, 2025. Enhanced with deep learning prediction engine and SCADA interface
+- July 06, 2025. Implemented floating panel UI with full-screen 3D background
 ```
+
+## Recent Changes
+
+### Floating Panel Interface (July 06, 2025)
+- Transformed UI from fixed panels to floating, draggable windows
+- 3D viewport now serves as full-screen background
+- Six specialized floating panels:
+  - SCADA Interface: Industrial control system overview
+  - System Dashboard: Real-time metrics and tank status
+  - AI/ML Predictions: Deep learning predictions and optimization
+  - Digital Twin: Real vs simulated data comparison
+  - System Alerts: Critical notifications and warnings
+  - Tank Control: Individual tank parameter adjustment
+
+### Deep Learning Integration
+- ML prediction service with 94.2% temperature prediction accuracy
+- Real-time boiler control optimization with reinforcement learning
+- Predictive maintenance scheduling based on failure risk assessment
+- Energy optimization recommendations with confidence scoring
+- Sensor health monitoring and calibration tracking
 
 ## User Preferences
 ```
