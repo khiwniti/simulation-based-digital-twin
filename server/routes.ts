@@ -77,7 +77,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     // Broadcast SCADA sensor data and alarms
     io.emit('scadaSensorDataUpdate', scadaSimulator.getSCADASensorData());
-    const scadaAlarms = scadaSimulator.getSCADAAlarms().filter(alarm => !alarm.acknowledged);
+    const scadaAlarms = scadaSimulator.getSCADAAlarms().filter((alarm: any) => !alarm.acknowledged);
     if (scadaAlarms.length > 0) {
       io.emit('scadaAlarmsUpdate', scadaAlarms);
     }
@@ -350,8 +350,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/loading-station-acknowledge-emergency/:stationId', (req, res) => {
     const { stationId } = req.params;
-    const success = scadaSimulator.acknowledgeLoadingStationEmergency(stationId);
-    res.json({ success, stationId });
+    const { emergencyId } = req.body;
+    const success = scadaSimulator.acknowledgeLoadingStationEmergency(stationId, emergencyId || 'emergency-001');
+    res.json({ success, stationId, emergencyId });
   });
 
   app.post('/api/loading-station-reset/:stationId', (req, res) => {

@@ -668,7 +668,8 @@ export class EnhancedMLPredictionService extends MLPredictionService {
     return {
       mlWeight: this.ensembleWeights.mlWeight * (1 - blendFactor) + adaptiveMLWeight * blendFactor,
       physicsWeight: this.ensembleWeights.physicsWeight * (1 - blendFactor) + adaptivePhysicsWeight * blendFactor,
-      adaptiveWeight: blendFactor
+      adaptiveWeight: blendFactor,
+      pinnWeight: this.ensembleWeights.pinnWeight || 0.1
     };
   }
 

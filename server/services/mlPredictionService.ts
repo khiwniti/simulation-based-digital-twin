@@ -239,7 +239,7 @@ export class MLPredictionService {
     return null; // No immediate maintenance needed
   }
 
-  private calculateTimeToTarget(tank: TankData, predictedSequence: number[]): number {
+  protected calculateTimeToTarget(tank: TankData, predictedSequence: number[]): number {
     const targetTemp = tank.targetTemperature;
     const tolerance = 2; // ±2°C tolerance
     
@@ -252,7 +252,7 @@ export class MLPredictionService {
     return -1; // Target not reached in prediction window
   }
 
-  private calculateVariance(values: number[]): number {
+  protected calculateVariance(values: number[]): number {
     if (values.length < 2) return 0;
     
     const mean = values.reduce((a, b) => a + b, 0) / values.length;

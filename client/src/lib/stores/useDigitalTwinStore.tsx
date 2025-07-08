@@ -319,7 +319,7 @@ export const useDigitalTwinStore = create<DigitalTwinStore>()(
         
         // Update sync latency for each component
         set((draft) => {
-          draft.components.forEach((component) => {
+          draft.components.forEach((component: any) => {
             component.syncLatency = Date.now() - startTime;
           });
         });
@@ -350,9 +350,9 @@ export const useDigitalTwinStore = create<DigitalTwinStore>()(
 
       updateSyncMetrics: () => set((draft) => {
         const components = Array.from(draft.components.values());
-        const synchronized = components.filter(c => c.reconciliationStatus === 'synchronized').length;
-        const diverged = components.filter(c => c.reconciliationStatus === 'diverged').length;
-        const avgLatency = components.reduce((sum, c) => sum + c.syncLatency, 0) / components.length || 0;
+        const synchronized = components.filter((c: any) => c.reconciliationStatus === 'synchronized').length;
+        const diverged = components.filter((c: any) => c.reconciliationStatus === 'diverged').length;
+        const avgLatency = components.reduce((sum: number, c: any) => sum + c.syncLatency, 0) / components.length || 0;
 
         draft.syncMetrics = {
           totalComponents: components.length,
@@ -388,18 +388,18 @@ export const useDigitalTwinStore = create<DigitalTwinStore>()(
         }
       }),
 
-      acknowledgeAlarm: (alarmId) => set((draft) => {
-        draft.components.forEach((component) => {
-          const alarm = component.alarms.find(a => a.id === alarmId);
+      acknowledgeAlarm: (alarmId: string) => set((draft) => {
+        draft.components.forEach((component: any) => {
+          const alarm = component.alarms.find((a: any) => a.id === alarmId);
           if (alarm) {
             alarm.acknowledged = true;
           }
         });
       }),
 
-      clearAlarm: (alarmId) => set((draft) => {
-        draft.components.forEach((component) => {
-          const alarm = component.alarms.find(a => a.id === alarmId);
+      clearAlarm: (alarmId: string) => set((draft) => {
+        draft.components.forEach((component: any) => {
+          const alarm = component.alarms.find((a: any) => a.id === alarmId);
           if (alarm) {
             alarm.active = false;
           }
@@ -425,7 +425,7 @@ export const useDigitalTwinStore = create<DigitalTwinStore>()(
         
         // Keep only recent history
         const cutoff = Date.now() - (draft.historyRetentionHours * 60 * 60 * 1000);
-        draft.stateHistory.set(key, history.filter(s => s.timestamp > cutoff));
+        draft.stateHistory.set(key, history.filter((s: any) => s.timestamp > cutoff));
       }),
 
       getHistory: (componentId, property, hours = 24) => {
@@ -437,8 +437,8 @@ export const useDigitalTwinStore = create<DigitalTwinStore>()(
 
       pruneHistory: () => set((draft) => {
         const cutoff = Date.now() - (draft.historyRetentionHours * 60 * 60 * 1000);
-        draft.stateHistory.forEach((history, key) => {
-          draft.stateHistory.set(key, history.filter(s => s.timestamp > cutoff));
+        draft.stateHistory.forEach((history: any, key: string) => {
+          draft.stateHistory.set(key, history.filter((s: any) => s.timestamp > cutoff));
         });
       }),
 

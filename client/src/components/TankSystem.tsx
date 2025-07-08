@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Environment, Grid } from '@react-three/drei';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { Tank3D } from './Tank3D';
 import { LoadingStation3D } from './LoadingStation3D';
 import { HotOilBoiler3D } from './HotOilBoiler3D';
@@ -11,7 +12,7 @@ import { socketManager } from '@/lib/socket';
 
 export function TankSystem() {
   const { tanks, selectedTank, setSelectedTank, setTanks, setConnectionStatus } = useTankSystem();
-  const controlsRef = useRef();
+  const controlsRef = useRef<OrbitControlsImpl>(null);
   const [loadingStations, setLoadingStations] = useState([
     { id: 1, position: [8, -1, -10] as [number, number, number], isActive: true, loadingInProgress: false, currentFlowRate: 0 },
     { id: 2, position: [8, -1, -18] as [number, number, number], isActive: true, loadingInProgress: false, currentFlowRate: 0 }
@@ -306,7 +307,7 @@ export function TankSystem() {
         {loadingStations.map((station) => (
           <LoadingStation3D
             key={station.id}
-            stationId={station.id}
+            stationId={station.id.toString()}
             position={station.position}
             isActive={station.isActive}
             loadingInProgress={station.loadingInProgress}
@@ -318,11 +319,9 @@ export function TankSystem() {
         {/* Hot-oil boiler */}
         <HotOilBoiler3D
           position={[-18, -1, 15]}
-          isRunning={boilerState.isRunning}
+          isActive={boilerState.isRunning}
           temperature={boilerState.temperature}
-          efficiency={boilerState.efficiency}
-          fuelFlow={boilerState.fuelFlow}
-          onSelect={() => console.log('Selected hot-oil boiler')}
+          boilerId="main-boiler"
         />
 
         {/* Reference grid lines */}

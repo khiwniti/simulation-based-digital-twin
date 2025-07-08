@@ -5,7 +5,7 @@ export interface TankData {
   targetTemperature: number;
   capacity: number;
   currentLevel: number;
-  status: 'normal' | 'warning' | 'critical';
+  status: 'normal' | 'warning' | 'critical' | 'offline';
   boilerStatus: 'active' | 'inactive' | 'maintenance';
   lastUpdated: Date;
   position: [number, number, number];

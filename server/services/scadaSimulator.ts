@@ -271,4 +271,609 @@ export class SCADASimulator {
       console.log(`Updated thresholds for tank ${tankId}:`, thresholds);
     }
   }
+
+  public getHotOilSystem() {
+    return {
+      temperature: 180 + Math.random() * 20,
+      pressure: 2.5 + Math.random() * 0.5,
+      flowRate: 150 + Math.random() * 50,
+      efficiency: 85 + Math.random() * 10,
+      status: 'active'
+    };
+  }
+
+  public getLoadingStations() {
+    return [
+      {
+        id: 1,
+        name: 'Loading Station 1',
+        position: [-15, 0, -10],
+        isActive: Math.random() > 0.3,
+        loadingInProgress: Math.random() > 0.7,
+        currentFlowRate: Math.random() * 100
+      },
+      {
+        id: 2,
+        name: 'Loading Station 2',
+        position: [15, 0, -10],
+        isActive: Math.random() > 0.3,
+        loadingInProgress: Math.random() > 0.7,
+        currentFlowRate: Math.random() * 100
+      }
+    ];
+  }
+
+  public getSystemOverview() {
+    return {
+      totalTanks: this.tanks.length,
+      activeTanks: this.tanks.filter(t => t.status === 'normal').length,
+      averageTemperature: this.tanks.reduce((sum, t) => sum + t.temperature, 0) / this.tanks.length,
+      totalCapacity: this.tanks.reduce((sum, t) => sum + t.capacity, 0),
+      totalLevel: this.tanks.reduce((sum, t) => sum + t.currentLevel, 0),
+      systemEfficiency: 85 + Math.random() * 10
+    };
+  }
+
+  public getPipeNetworks() {
+    return [
+      {
+        id: 'main-network',
+        name: 'Main Distribution Network',
+        pressure: 2.5 + Math.random() * 0.5,
+        flowRate: 200 + Math.random() * 100,
+        temperature: 160 + Math.random() * 20,
+        status: 'active'
+      }
+    ];
+  }
+
+  public getPipeFlowCalculations() {
+    return {
+      totalFlow: 300 + Math.random() * 100,
+      pressureDrop: 0.5 + Math.random() * 0.3,
+      efficiency: 90 + Math.random() * 5,
+      energyConsumption: 150 + Math.random() * 50
+    };
+  }
+
+  public getPipeAlarms() {
+    return [
+      {
+        id: 'pipe-alarm-1',
+        type: 'pressure',
+        severity: 'medium',
+        message: 'Pressure drop detected in main line',
+        acknowledged: false,
+        timestamp: new Date()
+      }
+    ].filter(() => Math.random() > 0.8); // Only show alarms 20% of the time
+  }
+
+  public getSCADASensorData(tagName?: string) {
+    const data = this.tanks.map(tank => ({
+      tankId: tank.id,
+      temperature: tank.temperature,
+      level: tank.currentLevel,
+      pressure: 2.0 + Math.random() * 1.0,
+      flowRate: Math.random() * 50,
+      timestamp: new Date()
+    }));
+    
+    if (tagName) {
+      // Filter by tag name if provided
+      return data.filter(d => d.tankId.toString().includes(tagName));
+    }
+    
+    return data;
+  }
+
+  public getSCADAAlarms() {
+    return this.tanks.flatMap(tank => {
+      const alarms = [];
+      if (tank.temperature > 170) {
+        alarms.push({
+          id: `temp-alarm-${tank.id}`,
+          tankId: tank.id,
+          type: 'temperature',
+          severity: 'high',
+          message: `High temperature in ${tank.name}`,
+          acknowledged: false,
+          timestamp: new Date()
+        });
+      }
+      return alarms;
+    }).filter(() => Math.random() > 0.9); // Only show alarms 10% of the time
+  }
+
+  public getSCADASensorReport() {
+    return {
+      totalSensors: this.tanks.length * 3, // 3 sensors per tank
+      activeSensors: Math.floor(this.tanks.length * 3 * 0.95),
+      faultySensors: Math.floor(this.tanks.length * 3 * 0.05),
+      lastCalibration: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      nextCalibration: new Date(Date.now() + 23 * 24 * 60 * 60 * 1000)
+    };
+  }
+
+  public getAsphaltFlowState() {
+    return {
+      mainFlow: 200 + Math.random() * 100,
+      distributionFlow: 150 + Math.random() * 75,
+      returnFlow: 50 + Math.random() * 25,
+      temperature: 160 + Math.random() * 20,
+      viscosity: 0.5 + Math.random() * 0.3,
+      status: 'active'
+    };
+  }
+
+  public getAsphaltFlowEfficiency() {
+    return {
+      efficiency: 85 + Math.random() * 10,
+      energyConsumption: 150 + Math.random() * 50,
+      heatLoss: 5 + Math.random() * 3,
+      pumpEfficiency: 90 + Math.random() * 5,
+      overallPerformance: 88 + Math.random() * 8
+    };
+  }
+
+  public getCoilThermalStates() {
+    return Array.from({ length: 6 }, (_, i) => ({
+      coilId: i + 1,
+      temperature: 180 + Math.random() * 40,
+      heatTransferRate: 50 + Math.random() * 30,
+      thermalEfficiency: 85 + Math.random() * 10,
+      status: Math.random() > 0.1 ? 'active' : 'maintenance'
+    }));
+  }
+
+  public getBoilerSimulationState() {
+    return {
+      isRunning: Math.random() > 0.2,
+      temperature: 200 + Math.random() * 50,
+      pressure: 3.0 + Math.random() * 1.0,
+      fuelFlow: 25 + Math.random() * 15,
+      efficiency: 80 + Math.random() * 15,
+      emissions: 15 + Math.random() * 10
+    };
+  }
+
+  public getBoilerAlarms() {
+    return [
+      {
+        id: 'boiler-alarm-1',
+        type: 'temperature',
+        severity: 'medium',
+        message: 'Boiler temperature approaching limit',
+        acknowledged: false,
+        timestamp: new Date()
+      }
+    ].filter(() => Math.random() > 0.85); // Only show alarms 15% of the time
+  }
+
+  public getBoilerPerformanceMetrics() {
+    return {
+      efficiency: 82 + Math.random() * 12,
+      fuelConsumption: 30 + Math.random() * 20,
+      heatOutput: 500 + Math.random() * 200,
+      emissions: {
+        co2: 100 + Math.random() * 50,
+        nox: 5 + Math.random() * 3,
+        so2: 2 + Math.random() * 1
+      },
+      operatingHours: 1200 + Math.random() * 800,
+      maintenanceScore: 85 + Math.random() * 10
+    };
+  }
+
+  public getLoadingStationOperations() {
+    return this.getLoadingStations().map(station => ({
+      ...station,
+      operationMode: Math.random() > 0.5 ? 'automatic' : 'manual',
+      throughput: Math.random() * 200,
+      efficiency: 85 + Math.random() * 10,
+      lastMaintenance: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
+    }));
+  }
+
+  public getThermalDynamicsState(tankId?: number) {
+    if (tankId) {
+      const tank = this.tanks.find(t => t.id === tankId);
+      if (!tank) return null;
+      
+      return {
+        tankId,
+        ambientTemperature: 25 + Math.random() * 15,
+        tankTemperature: tank.temperature,
+        heatTransferCoefficient: 0.8 + Math.random() * 0.4,
+        thermalConductivity: 0.5 + Math.random() * 0.3,
+        convectionRate: 10 + Math.random() * 5,
+        radiationLoss: 5 + Math.random() * 3,
+        overallHeatBalance: 95 + Math.random() * 5
+      };
+    }
+    
+    return {
+      ambientTemperature: 25 + Math.random() * 15,
+      heatTransferCoefficient: 0.8 + Math.random() * 0.4,
+      thermalConductivity: 0.5 + Math.random() * 0.3,
+      convectionRate: 10 + Math.random() * 5,
+      radiationLoss: 5 + Math.random() * 3,
+      overallHeatBalance: 95 + Math.random() * 5
+    };
+  }
+
+  public getAmbientConditions() {
+    return {
+      temperature: 25 + Math.random() * 15,
+      humidity: 40 + Math.random() * 30,
+      windSpeed: Math.random() * 10,
+      windDirection: Math.random() * 360,
+      pressure: 1013 + Math.random() * 20,
+      visibility: 10 + Math.random() * 5
+    };
+  }
+
+  public acknowledgePipeAlarm(alarmId: string) {
+    // In a real implementation, this would update the alarm status
+    console.log(`Acknowledged pipe alarm: ${alarmId}`);
+    return { success: true, message: `Alarm ${alarmId} acknowledged` };
+  }
+
+  public acknowledgeSCADAAlarm(alarmId: string, acknowledgedBy?: string) {
+    // In a real implementation, this would update the alarm status
+    console.log(`Acknowledged SCADA alarm: ${alarmId} by ${acknowledgedBy || 'operator'}`);
+    return { success: true, message: `SCADA alarm ${alarmId} acknowledged by ${acknowledgedBy || 'operator'}` };
+  }
+
+  public getSCADASensorMappings() {
+    return this.tanks.map(tank => ({
+      tankId: tank.id,
+      tagName: `ASP_${tank.id.toString().padStart(2, '0')}`,
+      sensorType: 'temperature',
+      unit: '°C',
+      range: { min: 0, max: 200 },
+      calibrationDate: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
+    }));
+  }
+
+  public getSCADATagGroups() {
+    return [
+      {
+        groupName: 'Temperature Sensors',
+        tags: this.tanks.map(tank => `ASP_${tank.id.toString().padStart(2, '0')}_TEMP`),
+        description: 'Tank temperature monitoring'
+      },
+      {
+        groupName: 'Level Sensors',
+        tags: this.tanks.map(tank => `ASP_${tank.id.toString().padStart(2, '0')}_LEVEL`),
+        description: 'Tank level monitoring'
+      },
+      {
+        groupName: 'Pressure Sensors',
+        tags: this.tanks.map(tank => `ASP_${tank.id.toString().padStart(2, '0')}_PRESS`),
+        description: 'Tank pressure monitoring'
+      }
+    ];
+  }
+
+  public getHotOilPhysicsState() {
+    return {
+      viscosity: 0.5 + Math.random() * 0.3,
+      density: 850 + Math.random() * 50,
+      specificHeat: 2.1 + Math.random() * 0.2,
+      thermalConductivity: 0.15 + Math.random() * 0.05,
+      expansionCoefficient: 0.0007 + Math.random() * 0.0003,
+      flashPoint: 220 + Math.random() * 30,
+      pourPoint: -10 + Math.random() * 20
+    };
+  }
+
+  public getSystemEnergyBalance() {
+    return {
+      totalEnergyInput: 1000 + Math.random() * 500,
+      totalEnergyOutput: 850 + Math.random() * 400,
+      energyLoss: 150 + Math.random() * 100,
+      efficiency: 85 + Math.random() * 10,
+      heatRecovery: 50 + Math.random() * 30,
+      fuelConsumption: 200 + Math.random() * 100,
+      electricalConsumption: 100 + Math.random() * 50
+    };
+  }
+
+  public getSystemEfficiency() {
+    return {
+      overall: 85 + Math.random() * 10,
+      thermal: 80 + Math.random() * 15,
+      mechanical: 90 + Math.random() * 8,
+      electrical: 95 + Math.random() * 4,
+      energyRecovery: 70 + Math.random() * 20
+    };
+  }
+
+  public setPumpSpeed(pumpId: string, speed: number) {
+    console.log(`Setting pump ${pumpId} speed to ${speed}%`);
+    return { success: true, pumpId, speed, message: `Pump speed set to ${speed}%` };
+  }
+
+  public setValvePosition(valveId: string, position: number) {
+    console.log(`Setting valve ${valveId} position to ${position}%`);
+    return { success: true, valveId, position, message: `Valve position set to ${position}%` };
+  }
+
+  public getCoilThermalState(tankId?: number) {
+    if (tankId) {
+      // Return thermal state for specific tank
+      const tank = this.tanks.find(t => t.id === tankId);
+      if (!tank) return null;
+      
+      return {
+        tankId,
+        coilTemperature: tank.temperature + Math.random() * 10,
+        heatTransferRate: 50 + Math.random() * 30,
+        thermalEfficiency: 85 + Math.random() * 10,
+        status: tank.status === 'normal' ? 'active' : 'inactive'
+      };
+    }
+    
+    // Return all coil thermal states
+    return this.getCoilThermalStates();
+  }
+
+  public optimizeCoilFlowRate(tankId: number, targetTemperature: number) {
+    const tank = this.tanks.find(t => t.id === tankId);
+    if (!tank) return { success: false, error: 'Tank not found' };
+    
+    const optimizedFlowRate = Math.max(10, Math.min(100, 
+      50 + (targetTemperature - tank.temperature) * 2
+    ));
+    
+    console.log(`Optimizing coil flow rate for tank ${tankId}: ${optimizedFlowRate}%`);
+    return { 
+      success: true, 
+      tankId, 
+      optimizedFlowRate, 
+      targetTemperature,
+      currentTemperature: tank.temperature
+    };
+  }
+
+  public getAsphaltProperties() {
+    return {
+      viscosity: 0.5 + Math.random() * 0.3,
+      density: 1000 + Math.random() * 100,
+      specificGravity: 1.0 + Math.random() * 0.1,
+      flashPoint: 230 + Math.random() * 20,
+      softeningPoint: 45 + Math.random() * 15,
+      penetration: 60 + Math.random() * 40,
+      ductility: 100 + Math.random() * 50,
+      solubility: 99 + Math.random() * 1
+    };
+  }
+
+  public setAsphaltValvePosition(valveId: string, position: number) {
+    console.log(`Setting asphalt valve ${valveId} position to ${position}%`);
+    return { success: true, valveId, position, message: `Asphalt valve position set to ${position}%` };
+  }
+
+  public setAsphaltPumpSpeed(pumpId: string, speed: number) {
+    console.log(`Setting asphalt pump ${pumpId} speed to ${speed}%`);
+    return { success: true, pumpId, speed, message: `Asphalt pump speed set to ${speed}%` };
+  }
+
+  public calculateOptimalAsphaltTemperature(targetViscosity: number, ambientTemp?: number) {
+    // Calculate optimal temperature based on target viscosity
+    // Using simplified viscosity-temperature relationship for asphalt
+    const ambientTemperature = ambientTemp || 25;
+    
+    // Viscosity decreases exponentially with temperature
+    // Target viscosity in centipoise, typical range 150-500 cP for asphalt
+    const baseTemp = 160; // Base temperature for medium viscosity
+    const tempAdjustment = Math.log(500 / Math.max(50, targetViscosity)) * 10;
+    const ambientAdjustment = (ambientTemperature - 20) * 0.3;
+    
+    const optimalTemp = baseTemp + tempAdjustment + ambientAdjustment;
+    const clampedTemp = Math.max(140, Math.min(180, optimalTemp));
+    
+    return {
+      targetViscosity,
+      ambientTemperature,
+      optimalTemperature: clampedTemp,
+      estimatedViscosity: 500 * Math.exp(-(clampedTemp - 160) / 10),
+      recommendation: clampedTemp > 175 ? 'High temperature - monitor closely' : 
+                     clampedTemp < 145 ? 'Low temperature - may affect flow' : 'Optimal range'
+    };
+  }
+
+  public getBoilerSpecifications() {
+    return {
+      model: 'Industrial Hot Oil Boiler HO-2000',
+      capacity: '2000 kW',
+      maxTemperature: 300,
+      maxPressure: 10,
+      fuelType: 'Natural Gas',
+      efficiency: 85,
+      emissions: {
+        noxLimit: 30,
+        coLimit: 50,
+        so2Limit: 10
+      },
+      safetyFeatures: ['Emergency shutdown', 'Pressure relief', 'Temperature monitoring'],
+      lastInspection: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+      nextMaintenance: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    };
+  }
+
+  public setBoilerTemperatureSetpoint(setpoint: number) {
+    const clampedSetpoint = Math.max(150, Math.min(280, setpoint));
+    console.log(`Setting boiler temperature setpoint to ${clampedSetpoint}°C`);
+    return { 
+      success: true, 
+      setpoint: clampedSetpoint, 
+      message: `Boiler temperature setpoint set to ${clampedSetpoint}°C` 
+    };
+  }
+
+  public acknowledgeBoilerAlarm(alarmId: string) {
+    console.log(`Acknowledged boiler alarm: ${alarmId}`);
+    return { success: true, message: `Boiler alarm ${alarmId} acknowledged` };
+  }
+
+  public emergencyShutdownBoiler() {
+    console.log('Emergency shutdown initiated for boiler');
+    return { 
+      success: true, 
+      message: 'Emergency shutdown initiated', 
+      timestamp: new Date(),
+      shutdownReason: 'Manual emergency shutdown'
+    };
+  }
+
+  public resetBoilerEmergencyShutdown() {
+    console.log('Resetting boiler emergency shutdown');
+    return { 
+      success: true, 
+      message: 'Emergency shutdown reset', 
+      timestamp: new Date(),
+      status: 'Ready for restart'
+    };
+  }
+
+  public getLoadingStationOperation(stationId: string | number) {
+    const id = typeof stationId === 'string' ? parseInt(stationId) : stationId;
+    const stations = this.getLoadingStationOperations();
+    const station = stations.find(s => s.id === id);
+    return station || null;
+  }
+
+  public getLoadingStationMetrics(stationId: string | number) {
+    const id = typeof stationId === 'string' ? parseInt(stationId) : stationId;
+    const station = this.getLoadingStationOperation(id);
+    if (!station) return null;
+    
+    return {
+      stationId: id,
+      totalThroughput: 1000 + Math.random() * 500,
+      averageFlowRate: station.currentFlowRate || 0,
+      operatingHours: 120 + Math.random() * 80,
+      efficiency: station.efficiency || 85,
+      maintenanceScore: 90 + Math.random() * 10,
+      lastCalibration: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
+    };
+  }
+
+  public startLoadingSequence(stationId: string | number, truck: any, operatorId?: string) {
+    const id = typeof stationId === 'string' ? parseInt(stationId) : stationId;
+    console.log(`Starting loading sequence for station ${id}, truck: ${truck?.id || 'unknown'}, operator: ${operatorId || 'unknown'}`);
+    return {
+      success: true,
+      stationId: id,
+      truck,
+      operatorId: operatorId || 'unknown',
+      estimatedDuration: Math.ceil((truck?.capacity || 5000) / 100), // minutes
+      sequenceId: `SEQ_${Date.now()}`,
+      status: 'initiated'
+    };
+  }
+
+  public acknowledgeLoadingStationEmergency(stationId: string, emergencyId: string) {
+    console.log(`Acknowledged loading station emergency: ${emergencyId} for station ${stationId}`);
+    return { 
+      success: true, 
+      stationId, 
+      emergencyId, 
+      message: `Emergency ${emergencyId} acknowledged for station ${stationId}` 
+    };
+  }
+
+  public resetLoadingStation(stationId: string) {
+    console.log(`Resetting loading station: ${stationId}`);
+    return { 
+      success: true, 
+      stationId, 
+      message: `Loading station ${stationId} reset successfully`,
+      timestamp: new Date(),
+      status: 'ready'
+    };
+  }
+
+  public getWeatherHistory() {
+    return Array.from({ length: 24 }, (_, i) => ({
+      timestamp: new Date(Date.now() - (23 - i) * 60 * 60 * 1000),
+      temperature: 20 + Math.sin(i / 4) * 10 + Math.random() * 5,
+      humidity: 50 + Math.cos(i / 6) * 20 + Math.random() * 10,
+      windSpeed: 5 + Math.random() * 10,
+      pressure: 1013 + Math.random() * 20
+    }));
+  }
+
+  public getTankThermalProperties(tankId: number) {
+    const tank = this.tanks.find(t => t.id === tankId);
+    if (!tank) return null;
+    
+    return {
+      tankId,
+      thermalConductivity: 0.15 + Math.random() * 0.05,
+      specificHeat: 2.1 + Math.random() * 0.2,
+      density: 950 + Math.random() * 100,
+      viscosity: 0.5 + Math.random() * 0.3,
+      expansionCoefficient: 0.0007 + Math.random() * 0.0003,
+      heatTransferCoefficient: 25 + Math.random() * 15,
+      insulationThickness: 0.1 + Math.random() * 0.05,
+      surfaceArea: 100 + Math.random() * 50
+    };
+  }
+
+  public calculateOptimalHeatingStrategy(tankId: number, targetTemperature: number) {
+    const tank = this.tanks.find(t => t.id === tankId);
+    if (!tank) return null;
+    
+    const currentTemp = tank.temperature;
+    const tempDiff = targetTemperature - currentTemp;
+    const heatingRate = Math.abs(tempDiff) / 10; // degrees per minute
+    const estimatedTime = Math.abs(tempDiff) / heatingRate;
+    
+    return {
+      tankId,
+      currentTemperature: currentTemp,
+      targetTemperature,
+      temperatureDifference: tempDiff,
+      recommendedHeatingRate: heatingRate,
+      estimatedTime: estimatedTime,
+      energyRequired: Math.abs(tempDiff) * 50, // kWh estimate
+      strategy: tempDiff > 0 ? 'heating' : 'cooling',
+      priority: Math.abs(tempDiff) > 20 ? 'high' : 'normal'
+    };
+  }
+
+  public simulateWeatherImpact(weatherScenario: any, durationHours: number) {
+    const baseTemp = weatherScenario.temperature || 25;
+    const windSpeed = weatherScenario.windSpeed || 5;
+    const humidity = weatherScenario.humidity || 50;
+    
+    return {
+      scenario: weatherScenario,
+      duration: durationHours,
+      temperatureImpact: {
+        heatLoss: windSpeed * 0.5 + (baseTemp < 20 ? (20 - baseTemp) * 0.3 : 0),
+        efficiency: Math.max(0.7, 1 - (Math.abs(baseTemp - 25) / 100)),
+        energyConsumption: 1 + (Math.abs(baseTemp - 25) / 50)
+      },
+      recommendations: [
+        baseTemp < 10 ? 'Increase heating capacity' : null,
+        windSpeed > 15 ? 'Check insulation integrity' : null,
+        humidity > 80 ? 'Monitor condensation' : null
+      ].filter(Boolean)
+    };
+  }
+
+  public updateAmbientConditionsManual(conditions: any) {
+    console.log('Updating ambient conditions:', conditions);
+    // In a real implementation, this would update the simulation parameters
+    return {
+      success: true,
+      updatedConditions: conditions,
+      timestamp: new Date(),
+      message: 'Ambient conditions updated successfully'
+    };
+  }
 }

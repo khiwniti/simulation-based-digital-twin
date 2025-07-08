@@ -387,7 +387,11 @@ export function PipeRouting3D({
                     <mesh 
                       key={`arrow-${index}`}
                       position={point}
-                      lookAt={nextPoint}
+                      ref={(mesh) => {
+                        if (mesh) {
+                          mesh.lookAt(nextPoint);
+                        }
+                      }}
                     >
                       <coneGeometry args={[segment.diameter * 0.8, segment.diameter * 2, 8]} />
                       <meshStandardMaterial 
