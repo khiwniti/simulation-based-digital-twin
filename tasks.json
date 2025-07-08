@@ -1,0 +1,892 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 13,
+        "title": "Setup Core Digital Twin Architecture and State Management",
+        "description": "Implement the foundational digital twin core architecture including twin state management system, real-time synchronization engine, and virtual-physical mapping layer",
+        "details": "Create a modular architecture using TypeScript/Node.js for the backend. Implement state management using Redux or MobX pattern for twin state. Use WebSocket connections for real-time sync. Create mapping layer with JSON configuration files that define relationships between physical assets and digital representations. Implement state reconciliation using event sourcing pattern with conflict resolution algorithms. Set up lifecycle management with state transitions (created, active, synchronized, offline, decommissioned).",
+        "testStrategy": "Unit test state management operations, integration test synchronization with mock SCADA data, validate mapping accuracy with test configurations, stress test with 1000+ state updates per second",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Core state management system design and implementation",
+            "description": "Design and implement the foundational state management system for digital twins, including state representation models, state storage mechanisms, and state transition logic",
+            "dependencies": [],
+            "details": "Create TypeScript interfaces for digital twin states, implement state containers using Redux or MobX patterns, design immutable state update mechanisms, implement state persistence layer with database integration, and create state validation and schema enforcement",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Real-time synchronization engine with WebSocket infrastructure",
+            "description": "Build a WebSocket-based real-time synchronization engine to maintain consistency between physical devices and their digital representations",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement WebSocket server using Socket.io or native WebSockets, create bidirectional communication protocols, design message queuing and buffering systems, implement connection management with auto-reconnection, and build real-time state delta computation and transmission",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Virtual-physical mapping layer with JSON configuration",
+            "description": "Develop a flexible mapping layer that translates between physical device properties and digital twin attributes using JSON-based configuration",
+            "dependencies": [
+              1
+            ],
+            "details": "Design JSON schema for mapping configurations, implement property transformation engines, create dynamic mapping loaders, build validation for mapping configurations, and implement bi-directional data transformation pipelines",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Event sourcing and state reconciliation system",
+            "description": "Implement event sourcing architecture for tracking all state changes and a reconciliation system to handle conflicts between physical and digital states",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Design event store with append-only log structure, implement event replay mechanisms, create conflict detection algorithms, build state reconciliation strategies (last-write-wins, merge, manual), and implement event compaction and archival systems",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Lifecycle management implementation",
+            "description": "Create comprehensive lifecycle management for digital twins including creation, updates, versioning, and deletion with proper state cleanup",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Implement twin creation workflows with initialization, design version control for twin configurations, create update propagation mechanisms, build soft-delete and archival systems, and implement lifecycle hooks and event notifications",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Performance optimization and testing framework",
+            "description": "Optimize the digital twin architecture for high-frequency updates and implement comprehensive testing framework for reliability",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Implement state update batching and throttling, optimize WebSocket message compression, create performance benchmarking suite, build integration tests for synchronization accuracy, implement load testing for concurrent twin operations, and create monitoring dashboards for system health",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Implement SCADA Integration Layer with Protocol Handlers",
+        "description": "Build comprehensive SCADA integration layer supporting OPC UA/DA and Modbus TCP/RTU protocols with real-time tag management and alarm processing",
+        "details": "Use node-opcua library for OPC UA implementation, modbus-serial for Modbus protocols. Create abstraction layer for protocol-agnostic data access. Implement tag management system with Redis for caching real-time values. Build alarm processor with configurable thresholds and priorities. Deploy SCADA gateway as containerized microservice using Docker. Include connection pooling, automatic reconnection, and data buffering for reliability.",
+        "testStrategy": "Test with OPC UA simulation server, validate Modbus communication with virtual PLCs, verify alarm triggering logic, test failover scenarios and connection recovery",
+        "priority": "high",
+        "dependencies": [
+          13
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "OPC UA protocol handler implementation with node-opcua",
+            "description": "Implement OPC UA client functionality using node-opcua library to connect to industrial OPC UA servers, handle authentication, browse address space, and subscribe to data changes",
+            "dependencies": [],
+            "details": "Create OPC UA client wrapper class with connection management, certificate handling, security policies support, subscription management for monitored items, data type mapping from OPC UA to internal format, and error handling with retry logic",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Modbus TCP/RTU protocol implementation",
+            "description": "Develop Modbus protocol handlers for both TCP and RTU variants to communicate with PLCs and field devices, supporting function codes for reading/writing coils, registers, and discrete inputs",
+            "dependencies": [],
+            "details": "Implement Modbus master functionality with support for TCP socket connections and serial RTU communications, handle multiple slave devices, implement polling mechanisms for data collection, support all common function codes (01-06, 15-16), and include CRC validation for RTU mode",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Protocol abstraction layer design",
+            "description": "Design and implement a unified abstraction layer that provides a common interface for different industrial protocols, enabling protocol-agnostic data access and control operations",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create abstract base classes for protocol handlers, define standardized data models for tags/points, implement protocol factory pattern for dynamic handler selection, design common interfaces for read/write/subscribe operations, and handle data type conversions between protocols",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Redis-based tag management and caching system",
+            "description": "Implement a high-performance tag management system using Redis for storing tag configurations, caching real-time values, and managing tag metadata with efficient indexing and retrieval",
+            "dependencies": [
+              3
+            ],
+            "details": "Design Redis data structures for tag storage (hash for metadata, sorted sets for timestamps), implement tag CRUD operations with validation, create caching layer with TTL management, develop tag grouping and hierarchical organization, and implement bulk operations for performance",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Alarm processing engine with configurable rules",
+            "description": "Build a real-time alarm processing engine that evaluates tag values against configurable rules, manages alarm states, and provides notification mechanisms for alarm conditions",
+            "dependencies": [
+              4
+            ],
+            "details": "Implement rule engine with support for threshold, rate-of-change, and complex conditional alarms, create alarm state machine (normal, active, acknowledged, cleared), develop alarm priority and escalation logic, implement alarm history logging, and create notification interfaces for email/SMS/webhook alerts",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Connection reliability features (pooling, reconnection, buffering)",
+            "description": "Implement robust connection management features including connection pooling, automatic reconnection logic, and data buffering to ensure reliable SCADA communications",
+            "dependencies": [
+              3
+            ],
+            "details": "Create connection pool manager with configurable pool sizes per protocol, implement exponential backoff reconnection strategy, develop offline data buffering with persistent storage fallback, add connection health monitoring and diagnostics, and implement load balancing for multiple server connections",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Containerization and deployment configuration",
+            "description": "Package the SCADA integration system into Docker containers with proper configuration management, orchestration support, and deployment automation for various environments",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Create multi-stage Dockerfile for optimized image size, implement docker-compose configuration for local development, design Kubernetes manifests with ConfigMaps and Secrets, setup health checks and readiness probes, configure resource limits and scaling policies, and implement CI/CD pipeline for automated deployments",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Setup MLOps Infrastructure with Data Lake and Time-Series Database",
+        "description": "Establish MLOps foundation including MinIO/S3 for data storage, InfluxDB for time-series data, DVC for versioning, and Feast feature store",
+        "details": "Deploy MinIO in Kubernetes cluster with 3-node replication. Configure InfluxDB with retention policies for different data types (raw: 30 days, aggregated: 1 year). Setup DVC with MinIO backend for model and data versioning. Install Feast with Redis online store and MinIO offline store. Create data ingestion pipelines using Apache Kafka. Implement data quality checks using Great Expectations. Configure automated backups and disaster recovery.",
+        "testStrategy": "Benchmark write performance (target: 100k points/sec), test data retrieval latency (<10ms), validate DVC versioning workflow, test feature store serving performance",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Deploy MinIO on Kubernetes with Multi-Site Replication",
+            "description": "Set up MinIO object storage on Kubernetes cluster with high availability and multi-site replication for distributed data storage",
+            "dependencies": [],
+            "details": "Install MinIO operator, configure storage classes, set up multi-tenant buckets, implement erasure coding for data protection, configure load balancing, and establish cross-region replication policies",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Install InfluxDB and Configure Retention Policies",
+            "description": "Deploy InfluxDB time-series database for metrics storage with appropriate retention policies for MLOps monitoring data",
+            "dependencies": [],
+            "details": "Deploy InfluxDB v2.x on Kubernetes, create organizations and buckets, configure retention policies for different metric types, set up continuous queries for downsampling, implement authentication and authorization",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Configure DVC with MinIO Backend Integration",
+            "description": "Set up Data Version Control (DVC) system integrated with MinIO for versioning datasets and ML models",
+            "dependencies": [
+              1
+            ],
+            "details": "Install DVC, configure MinIO as remote storage backend, set up DVC pipelines, implement data versioning workflows, configure access credentials, and establish branch-based experiment tracking",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Deploy Feast Feature Store with Redis and MinIO",
+            "description": "Implement Feast feature store with Redis for online serving and MinIO for offline storage of feature data",
+            "dependencies": [
+              1
+            ],
+            "details": "Deploy Feast on Kubernetes, configure Redis cluster for online features, integrate MinIO for offline feature storage, set up feature repositories, implement feature serving APIs, and configure materialization jobs",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Build Kafka-Based Data Ingestion Pipeline",
+            "description": "Create scalable data ingestion pipeline using Apache Kafka for real-time data streaming into the MLOps platform",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Deploy Kafka cluster with Zookeeper, configure topics and partitions, implement producers and consumers, set up Kafka Connect for data sources, configure schema registry, and integrate with feature store",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Implement Great Expectations Data Quality Framework",
+            "description": "Deploy Great Expectations for automated data quality validation and monitoring across the ML pipeline",
+            "dependencies": [
+              1,
+              3,
+              5
+            ],
+            "details": "Install Great Expectations, create data quality checkpoints, define expectation suites for datasets, integrate with DVC pipelines, configure validation stores in MinIO, and set up automated alerting",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Establish Backup and Disaster Recovery System",
+            "description": "Implement comprehensive backup and disaster recovery procedures for all MLOps components and data",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Configure automated backups for MinIO, InfluxDB, and Redis, implement point-in-time recovery, set up cross-region replication, create disaster recovery runbooks, test failover procedures, and establish RTO/RPO targets",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Create Enhanced Plant Layout and Tank Configuration Models",
+        "description": "Update plant layout configuration to match real plant (scale 1:20m) and extend tank models with heating coil specifications and SCADA sensor mappings",
+        "details": "Define PlantLayout class with accurate positioning using provided images. Create TankConfiguration extending base model with: coilGeometry (3-turn specifications), thermalParameters (heat transfer coefficients), insulation properties. Implement SCADAMapping class linking sensors to components with standardized naming (e.g., TK101_TEMP_TOP). Use JSON schema validation for configurations. Store in PostgreSQL with versioning support.",
+        "testStrategy": "Validate layout accuracy against plant drawings, test configuration loading and validation, verify SCADA mappings with sample data, test thermal parameter calculations",
+        "priority": "high",
+        "dependencies": [
+          13
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "PlantLayout class design with accurate positioning system",
+            "description": "Design and implement a PlantLayout class that accurately represents physical asset positions using a coordinate system, supporting both 2D and 3D positioning with proper scaling and reference points",
+            "dependencies": [],
+            "details": "Create a flexible positioning system that can handle relative and absolute coordinates, support different units of measurement (meters, feet), include rotation/orientation data, and provide methods for calculating distances between assets. Include support for hierarchical layouts (plant > area > equipment)",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "TankConfiguration model with thermal and coil specifications",
+            "description": "Develop a comprehensive TankConfiguration model that captures all thermal properties, coil specifications, and operational parameters for accurate process modeling",
+            "dependencies": [],
+            "details": "Model should include tank geometry (dimensions, volume), thermal properties (insulation, heat transfer coefficients), coil specifications (surface area, material, flow patterns), operational limits (temperature, pressure ranges), and support for multiple coil configurations. Include calculation methods for heat transfer rates",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "SCADA mapping implementation with standardized naming",
+            "description": "Implement a SCADA mapping system with standardized naming conventions that links physical assets to their control system tags and ensures consistent identification across systems",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create a mapping structure that follows ISA-95 naming standards, supports tag hierarchies (area.equipment.parameter), includes data type specifications, handles aliases for legacy systems, and provides validation for tag format compliance. Include metadata for units, ranges, and update frequencies",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "JSON schema validation setup",
+            "description": "Set up comprehensive JSON schema validation for all configuration models to ensure data integrity and consistency across the system",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create JSON schemas for PlantLayout, TankConfiguration, and SCADA mappings using JSON Schema Draft 7 or later. Include required fields, data type validation, range constraints, pattern matching for naming conventions, and cross-reference validation. Implement schema versioning and migration support",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "PostgreSQL storage with versioning support",
+            "description": "Design and implement PostgreSQL database schema with full versioning support for configuration data, enabling audit trails and rollback capabilities",
+            "dependencies": [
+              4
+            ],
+            "details": "Create normalized database schema with tables for configurations, versions, and change history. Implement triggers for automatic versioning, support for branching/tagging configurations, efficient storage of configuration diffs, and APIs for version comparison and rollback. Include indexes for performance optimization",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Implement Physics Simulation Engine with NVIDIA Modulus Integration",
+        "description": "Build comprehensive physics simulation engine for hot-oil circulation, heat transfer, and asphalt flow with NVIDIA Modulus for physics-informed neural networks",
+        "details": "Install NVIDIA Modulus and configure GPU environment. Implement HotOilCirculation class with pump curves, pressure drop calculations (Darcy-Weisbach), and heat transfer equations. Create CoilHeatTransfer module using finite difference method for 3-turn coils. Implement AsphaltFlow with temperature-dependent viscosity (Arrhenius equation). Convert PDEs to PINNs using Modulus APIs. Define physics loss functions combining data loss and PDE residuals. Setup distributed training with Horovod.",
+        "testStrategy": "Validate physics calculations against engineering references, compare PINN predictions with analytical solutions, test real-time performance (<100ms inference), verify energy balance",
+        "priority": "high",
+        "dependencies": [
+          15,
+          16
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "NVIDIA Modulus environment setup and GPU configuration",
+            "description": "Set up NVIDIA Modulus framework, configure CUDA environment, and optimize GPU settings for physics-informed neural network training",
+            "dependencies": [],
+            "details": "Install Modulus SDK, configure multi-GPU support, set up CUDA toolkit, optimize memory allocation, and validate GPU compute capabilities for PINN workloads",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Hot-oil circulation physics implementation with pump curves",
+            "description": "Implement fluid dynamics equations for hot-oil circulation system including pump performance curves and pressure-flow relationships",
+            "dependencies": [
+              1
+            ],
+            "details": "Model Navier-Stokes equations for oil flow, implement pump affinity laws, calculate pressure drops, and define boundary conditions for circulation system",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Coil heat transfer module using finite difference methods",
+            "description": "Develop heat transfer calculations for heating coils using finite difference discretization of conduction and convection equations",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement 3D heat conduction equations, model convective heat transfer coefficients, discretize spatial and temporal domains, and handle thermal boundary conditions",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Asphalt flow modeling with temperature-dependent viscosity",
+            "description": "Create non-Newtonian fluid flow model for asphalt with viscosity varying as function of temperature",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement Arrhenius viscosity model, couple momentum equations with energy equation, model shear-thinning behavior, and validate against empirical asphalt data",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "PDE to PINN conversion using Modulus APIs",
+            "description": "Convert traditional PDE formulations into physics-informed neural network architecture using Modulus symbolic APIs",
+            "dependencies": [
+              4
+            ],
+            "details": "Transform governing equations to Modulus symbolic format, define neural network architectures, implement automatic differentiation for PDE residuals, and create geometry parameterization",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Physics-informed loss function design",
+            "description": "Design composite loss function incorporating PDE residuals, boundary conditions, initial conditions, and data constraints",
+            "dependencies": [
+              5
+            ],
+            "details": "Weight PDE loss terms, implement adaptive loss balancing, add regularization terms, incorporate experimental data losses, and design convergence criteria",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Distributed training setup with Horovod",
+            "description": "Configure distributed training across multiple GPUs using Horovod for efficient PINN model training",
+            "dependencies": [
+              6
+            ],
+            "details": "Set up Horovod with NCCL backend, implement data parallelism strategies, configure gradient synchronization, optimize batch sizing, and monitor scaling efficiency",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "Real-time inference optimization",
+            "description": "Optimize trained PINN model for real-time inference including model quantization and deployment strategies",
+            "dependencies": [
+              7
+            ],
+            "details": "Implement TensorRT optimization, apply mixed precision inference, create inference pipeline, benchmark latency, and develop caching strategies for temporal predictions",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Build Real-time Data Pipeline and Streaming Analytics",
+        "description": "Implement comprehensive data pipeline for SCADA data ingestion, preprocessing, and streaming analytics with Apache Kafka and Redis Streams",
+        "details": "Setup Kafka cluster with 3 brokers for reliability. Create producers for each SCADA protocol (OPC UA, Modbus). Implement stream processing using Kafka Streams for data validation, interpolation, and aggregation. Use Redis Streams for low-latency data distribution to UI. Build Apache Spark jobs for batch processing and feature engineering. Implement data quality gates checking completeness, range validation, and rate of change limits. Create dead letter queues for failed messages.",
+        "testStrategy": "Load test with 10k messages/second, verify end-to-end latency <100ms, test data quality rules with synthetic anomalies, validate exactly-once processing semantics",
+        "priority": "high",
+        "dependencies": [
+          14,
+          15
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Kafka cluster setup and configuration",
+            "description": "Set up and configure a production-ready Kafka cluster with appropriate partitioning, replication, and security settings for SCADA data ingestion",
+            "dependencies": [],
+            "details": "Configure Kafka brokers with optimal settings for high-throughput SCADA data, set up topics with appropriate partition counts and replication factors, implement SSL/SASL authentication, configure retention policies, and establish monitoring with JMX metrics",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "SCADA protocol-specific producers implementation",
+            "description": "Develop Kafka producers for various SCADA protocols (OPC UA, Modbus, DNP3) with proper serialization and error handling",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement protocol adapters for each SCADA system, create Avro/Protobuf schemas for data serialization, implement producer configurations for idempotency and exactly-once semantics, add connection pooling and retry mechanisms, and include metrics collection for producer performance",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Kafka Streams processing for validation and aggregation",
+            "description": "Build Kafka Streams applications for real-time data validation, transformation, and time-window aggregations",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop stream processing topologies for data validation rules, implement windowed aggregations (tumbling, hopping, session windows), create state stores for maintaining device states, implement exactly-once processing guarantees, and add custom SerDes for SCADA data types",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Redis Streams integration for UI distribution",
+            "description": "Implement Redis Streams consumer and publisher for distributing processed data to UI components with low latency",
+            "dependencies": [
+              3
+            ],
+            "details": "Create Kafka-to-Redis bridge application, implement Redis Streams data structures for real-time updates, configure consumer groups for UI scalability, add WebSocket integration for browser push, and implement backpressure handling between Kafka and Redis",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Spark batch processing jobs",
+            "description": "Develop Spark batch jobs for historical analysis, anomaly detection, and report generation from Kafka data",
+            "dependencies": [
+              3
+            ],
+            "details": "Create Spark Structured Streaming jobs for micro-batch processing, implement historical data aggregation and trending analysis, develop ML pipelines for anomaly detection, configure checkpointing and fault tolerance, and integrate with data warehouse for long-term storage",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Data quality gates and dead letter queue implementation",
+            "description": "Implement comprehensive data quality validation gates and dead letter queue patterns for handling malformed or invalid data",
+            "dependencies": [
+              2,
+              3,
+              5
+            ],
+            "details": "Create schema validation gates at producer and consumer levels, implement dead letter topics for failed messages, develop monitoring dashboards for data quality metrics, create alerting rules for quality threshold breaches, and build reprocessing mechanisms for dead letter queue items",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Develop Predictive ML Models for Temperature and Energy Optimization",
+        "description": "Create machine learning models for temperature prediction, energy consumption forecasting, and heating demand optimization with weather correlation",
+        "details": "Implement LSTM model using PyTorch for 24-hour temperature prediction with attention mechanism. Create energy consumption model using XGBoost with features: ambient temperature, tank levels, production schedule. Build heating demand predictor correlating weather data (OpenWeatherMap API) with historical consumption. Implement online learning capability for model adaptation. Use Optuna for hyperparameter optimization. Deploy models with ONNX for inference optimization.",
+        "testStrategy": "Validate prediction accuracy (RMSE < 2°C for temperature), test model performance on edge cases, verify weather API integration, benchmark inference speed",
+        "priority": "medium",
+        "dependencies": [
+          15,
+          17,
+          18
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "LSTM Temperature Prediction Model with Attention Mechanism",
+            "description": "Develop a Long Short-Term Memory neural network with attention mechanism for accurate temperature prediction using historical weather data and sensor readings",
+            "dependencies": [],
+            "details": "Implement LSTM architecture with multi-head attention layers to capture temporal dependencies in temperature patterns. Include data preprocessing pipeline for time series normalization, feature engineering for seasonal patterns, and sliding window approach for sequence generation. Model should handle variable-length input sequences and provide uncertainty estimates.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "XGBoost Energy Consumption Forecasting",
+            "description": "Build gradient boosting model for predicting building energy consumption based on historical usage patterns, occupancy data, and external factors",
+            "dependencies": [],
+            "details": "Design feature engineering pipeline to extract time-based features (hour, day, week, month), lagged consumption values, and rolling statistics. Implement custom objective function for asymmetric loss to penalize under-predictions more heavily. Include feature importance analysis and SHAP value computation for model interpretability.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Weather-Correlated Heating Demand Predictor",
+            "description": "Create ensemble model combining weather forecasts with building thermal characteristics to predict heating demand accurately",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Integrate temperature predictions from LSTM model with energy consumption patterns from XGBoost. Implement thermal mass calculations and heat loss coefficients. Include external weather API integration for real-time forecast data. Design feature crosses between temperature, humidity, wind speed, and building occupancy.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Online Learning Capability Implementation",
+            "description": "Develop incremental learning system to continuously update models with new data without full retraining",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Implement online learning algorithms for both LSTM and XGBoost models. Design data buffer management for mini-batch updates, concept drift detection using statistical tests, and model versioning system. Include automated rollback mechanism for performance degradation scenarios.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Hyperparameter Optimization with Optuna",
+            "description": "Implement automated hyperparameter tuning framework using Optuna for all ML models to maximize prediction accuracy",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Configure Optuna studies with appropriate search spaces for each model type. Implement pruning strategies for early stopping of unpromising trials. Design multi-objective optimization for balancing accuracy and inference speed. Include cross-validation setup and custom metrics for time series evaluation.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "ONNX Deployment Optimization",
+            "description": "Convert trained models to ONNX format and optimize for efficient real-time inference in production environment",
+            "dependencies": [
+              1,
+              2,
+              3,
+              5
+            ],
+            "details": "Export PyTorch LSTM and XGBoost models to ONNX format with proper input/output specifications. Apply quantization and graph optimization techniques to reduce model size and inference latency. Implement ONNX Runtime integration with batching support and GPU acceleration. Include performance benchmarking and A/B testing framework.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Create Enhanced 3D Visualization with React Three Fiber",
+        "description": "Update 3D visualization components to accurately represent plant layout, pipe networks, and dynamic flow animations with realistic details",
+        "details": "Refactor TankSystem.tsx using React Three Fiber with proper scale (1:20m). Create PipeNetwork component with parametric pipe generation for hot-oil (yellow) and asphalt (black) networks. Implement FlowAnimation using shader materials for realistic flow visualization. Add BoilerModel and LoadingStation components with detailed 3D models (GLTF format). Create HeatingCoilVisualization showing thermal gradients. Implement LOD (Level of Detail) system for performance. Use instanced rendering for repeated elements.",
+        "testStrategy": "Test rendering performance (60 FPS with 50+ tanks), validate layout accuracy, test interaction responsiveness, verify mobile compatibility",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Refactor TankSystem with Proper Scaling",
+            "description": "Refactor the existing TankSystem component to implement proper scaling mechanisms, coordinate systems, and responsive sizing based on real-world dimensions",
+            "dependencies": [],
+            "details": "- Implement a scaling system that converts real-world measurements to 3D units\n- Create a coordinate system manager for consistent positioning\n- Add responsive scaling based on viewport size\n- Implement bounds checking and collision detection\n- Create utility functions for unit conversions\n- Add configuration for different scale modes (fit-to-screen, real-scale, custom)",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Create PipeNetwork Component with Parametric Generation",
+            "description": "Develop a parametric pipe network component that can generate complex piping systems based on configuration parameters and connection points",
+            "dependencies": [
+              1
+            ],
+            "details": "- Design parametric pipe generation algorithm using curves and extrusion\n- Implement connection point system for tanks and equipment\n- Create pipe routing algorithm with collision avoidance\n- Add support for different pipe diameters and materials\n- Implement pipe fittings (elbows, tees, valves) as reusable components\n- Create visual indicators for flow direction",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Shader-based Flow Animations",
+            "description": "Create custom shaders for realistic fluid flow animations within pipes and tanks using GLSL and React Three Fiber's shader material system",
+            "dependencies": [
+              2
+            ],
+            "details": "- Write GLSL vertex and fragment shaders for flow visualization\n- Implement animated texture coordinates for flow movement\n- Create particle-based flow indicators\n- Add turbulence and velocity variations\n- Implement color-coded flow based on temperature or fluid type\n- Optimize shader performance for multiple simultaneous flows",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Integrate 3D Models for Boilers and Loading Stations",
+            "description": "Import and integrate detailed 3D models for boilers, loading stations, and other complex equipment with proper materials and animations",
+            "dependencies": [
+              1
+            ],
+            "details": "- Set up 3D model loading pipeline (GLTF/GLB format)\n- Implement model optimization and compression\n- Create material system for realistic rendering\n- Add animation support for moving parts\n- Implement model swapping for different equipment types\n- Create fallback geometries for failed model loads",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Develop Thermal Gradient Visualization for Heating Coils",
+            "description": "Create a thermal visualization system for heating coils showing temperature gradients and heat distribution using color mapping and visual effects",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "- Implement temperature-to-color mapping system\n- Create gradient shader for smooth thermal transitions\n- Add heat haze/distortion effects using post-processing\n- Implement real-time temperature data integration\n- Create thermal legends and scale indicators\n- Add interactive temperature probes for detailed readings",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Optimize Performance with LOD and Instancing",
+            "description": "Implement performance optimization techniques including Level of Detail (LOD) systems and geometry instancing for smooth rendering of complex scenes",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "- Implement multi-level LOD system for all geometry\n- Create instanced rendering for repeated elements (pipes, valves)\n- Add frustum culling and occlusion culling\n- Implement texture atlasing for reduced draw calls\n- Create performance monitoring and adaptive quality system\n- Add progressive loading for large scenes",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "title": "Implement MLOps CI/CD Pipeline and Model Governance",
+        "description": "Setup automated ML pipeline with model testing, validation, deployment, and governance including A/B testing and drift detection",
+        "details": "Configure GitLab CI/CD with stages: data validation, model training, testing, staging deployment, production release. Implement automated model testing framework using pytest and MLflow. Create A/B testing infrastructure with traffic splitting (90/10 initial). Build drift detection using Evidently AI monitoring PSI and KS statistics. Implement model registry with MLflow including metadata: training data version, performance metrics, approval status. Setup automated rollback triggers based on performance degradation. Create model cards for documentation.",
+        "testStrategy": "Test pipeline with intentional failures, validate A/B test statistical significance, verify drift detection sensitivity, test emergency rollback procedures",
+        "priority": "medium",
+        "dependencies": [
+          15,
+          19
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure GitLab CI/CD Pipeline for ML Workflows",
+            "description": "Set up GitLab CI/CD pipeline with stages for data validation, model training, testing, and deployment. Include environment-specific configurations and artifact management.",
+            "dependencies": [],
+            "details": "Create .gitlab-ci.yml with stages: lint, test, train, evaluate, package, deploy. Configure runners with GPU support, set up environment variables, implement caching for dependencies, and define deployment strategies for different environments (dev, staging, prod).",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Automated Model Testing Framework",
+            "description": "Build comprehensive testing suite for ML models including unit tests, integration tests, and performance benchmarks. Implement data quality checks and model validation metrics.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create pytest-based testing framework with fixtures for model loading, implement tests for model inference latency, accuracy thresholds, data schema validation, and edge case handling. Include smoke tests for API endpoints and batch prediction pipelines.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Build A/B Testing Infrastructure with Traffic Splitting",
+            "description": "Design and implement A/B testing system with configurable traffic splitting, experiment tracking, and statistical significance testing for model performance comparison.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Set up feature flags system, implement traffic router with weighted distribution, create experiment configuration management, build real-time metrics collection, and develop statistical analysis tools for determining experiment winners with confidence intervals.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Integrate Evidently AI for Drift Detection",
+            "description": "Configure Evidently AI monitoring for data drift, prediction drift, and model performance degradation. Set up automated alerts and reporting dashboards.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Install and configure Evidently, create drift detection pipelines for training vs production data, implement custom drift metrics, set up scheduled monitoring jobs, configure alerting thresholds, and build visualization dashboards for drift reports.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Set Up MLflow Model Registry",
+            "description": "Configure MLflow for centralized model versioning, metadata tracking, and lifecycle management. Implement model promotion workflows across environments.",
+            "dependencies": [
+              1
+            ],
+            "details": "Deploy MLflow server with backend store and artifact storage, implement model registration automation, create staging workflows, set up model versioning with semantic versioning, configure access controls, and integrate with CI/CD for automatic model registration.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Implement Automated Rollback and Documentation System",
+            "description": "Create automated rollback mechanisms for failed deployments and comprehensive model documentation generation including model cards and lineage tracking.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Build rollback automation with health checks and performance thresholds, implement model card generation with training details and ethical considerations, create automated changelog generation, set up model lineage tracking, and configure documentation deployment to wiki or documentation site.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "title": "Deploy Production Infrastructure with Kubernetes and Monitoring",
+        "description": "Setup production-ready Kubernetes infrastructure with NVIDIA GPU support, monitoring stack, and multi-region deployment capabilities",
+        "details": "Deploy Kubernetes cluster using EKS/GKE with GPU node pools (NVIDIA T4/V100). Install NVIDIA device plugin and container toolkit. Setup Prometheus operator with custom metrics for ML models. Deploy Grafana with dashboards for system and ML metrics. Implement Jaeger for distributed tracing. Configure Istio service mesh for traffic management and security. Setup horizontal pod autoscaling based on inference latency. Implement multi-region deployment with data replication. Configure backup strategies using Velero.",
+        "testStrategy": "Perform chaos engineering tests, validate auto-scaling under load, test disaster recovery procedures, verify cross-region failover",
+        "priority": "medium",
+        "dependencies": [
+          19,
+          20,
+          21
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Kubernetes cluster setup with GPU support",
+            "description": "Set up production-grade Kubernetes clusters with GPU node pools across multiple regions, configure networking, storage classes, and ensure proper GPU resource allocation",
+            "dependencies": [],
+            "details": "Configure EKS/GKE/AKS clusters with GPU-enabled node pools, set up VPC networking, configure storage classes for high-performance workloads, implement node affinity rules for GPU workloads, and establish multi-region cluster federation",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "NVIDIA device plugin and toolkit installation",
+            "description": "Install and configure NVIDIA GPU operator, device plugin, and container toolkit to enable GPU access for containerized workloads",
+            "dependencies": [
+              1
+            ],
+            "details": "Deploy NVIDIA GPU operator via Helm, configure device plugin DaemonSet, validate GPU resource discovery, set up GPU feature discovery, configure time-slicing if needed, and test GPU allocation with sample workloads",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Prometheus and custom metrics configuration",
+            "description": "Deploy Prometheus stack with custom metrics for GPU utilization, model inference latency, and application-specific performance indicators",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Install Prometheus operator, configure ServiceMonitors for all components, set up DCGM exporter for GPU metrics, create custom recording rules for inference performance, configure long-term storage with Thanos, and implement alerting rules",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Grafana dashboard creation",
+            "description": "Design and implement comprehensive Grafana dashboards for system monitoring, GPU utilization, model performance, and business metrics visualization",
+            "dependencies": [
+              3
+            ],
+            "details": "Create GPU utilization dashboard with CUDA metrics, design inference performance dashboard with p50/p95/p99 latencies, implement cost analysis dashboard, set up alert panels, configure dashboard provisioning, and establish dashboard versioning",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Jaeger distributed tracing setup",
+            "description": "Deploy Jaeger for end-to-end request tracing across microservices, including trace collection, storage, and query infrastructure",
+            "dependencies": [
+              1
+            ],
+            "details": "Install Jaeger operator, configure Elasticsearch backend for trace storage, set up Jaeger collectors with appropriate sampling strategies, implement OpenTelemetry instrumentation, configure trace correlation with logs, and establish retention policies",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Istio service mesh deployment",
+            "description": "Install and configure Istio service mesh for traffic management, security, and observability across all microservices",
+            "dependencies": [
+              1,
+              5
+            ],
+            "details": "Deploy Istio control plane with production configuration, implement mutual TLS for service-to-service communication, configure traffic policies and circuit breakers, set up distributed tracing integration, implement canary deployment strategies, and configure egress gateways",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Auto-scaling and multi-region configuration",
+            "description": "Implement horizontal and vertical pod autoscaling with GPU awareness, configure cluster autoscaling, and set up multi-region traffic distribution",
+            "dependencies": [
+              1,
+              2,
+              3,
+              6
+            ],
+            "details": "Configure HPA with custom GPU metrics, implement VPA for right-sizing, set up cluster autoscaler with GPU node pools, configure multi-region load balancing with latency-based routing, implement region failover strategies, and establish cross-region data replication",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "Velero backup implementation",
+            "description": "Deploy and configure Velero for disaster recovery, including scheduled backups, cross-region replication, and automated restore testing",
+            "dependencies": [
+              1,
+              7
+            ],
+            "details": "Install Velero with object storage backend, configure scheduled backups for all namespaces, implement backup hooks for stateful services, set up cross-region backup replication, create restore runbooks, implement automated restore testing, and establish RTO/RPO monitoring",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-07T13:17:47.959Z",
+      "updated": "2025-07-08T04:59:44.668Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
