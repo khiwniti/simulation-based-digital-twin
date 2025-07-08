@@ -7,6 +7,7 @@ import { MLPredictionService } from "./services/mlPredictionService";
 import { digitalTwinSyncService } from "./services/digitalTwinSyncService";
 import { scadaProtocolService } from "./services/scadaProtocolService";
 import { historianInterfaceService } from "./services/historianInterfaceService";
+import tankTwinRoutes from "./routes/tankTwinRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -469,6 +470,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     res.json(comparison);
   });
+
+  // Tank Twin Manager API routes
+  app.use('/api/tank-twin', tankTwinRoutes);
 
   // Socket.IO event handlers
   io.on('connection', (socket) => {
